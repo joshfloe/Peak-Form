@@ -6,7 +6,2031 @@
 <title>PeakForm — Run. Lift. Fuel.</title>
 <style>
   :root{
+    --bg:#0B0D10<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeakForm — Run. Lift. Fuel.</title>
+<style>
+  :root{
     --bg:#0B0D10;
+    --surface:#15181D;
+    --surface-2:#1C2027;
+    --surface-3:#242832;
+    --border:#272C35;
+    --text:#F3F5F7;
+    --text-dim:#9AA1AC;
+    --text-faint:#666D79;
+    --accent:#FF5B2E;
+    --accent-dim:#4A2417;
+    --run:#FF5B2E;
+    --lift:#4C8DFF;
+    --fuel:#3ED598;
+    --warn:#FFB020;
+    --danger:#FF5C5C;
+    --radius:14px;
+    --radius-sm:9px;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  h1,h2,h3,h4{margin:0;}
+  p{margin:0;}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:8px;}
+
+  #app{display:flex;min-height:100vh;}
+
+  /* ---------- Sidebar / Nav ---------- */
+  .sidebar{
+    width:230px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;padding:22px 14px;gap:4px;position:sticky;top:0;height:100vh;
+  }
+  .brand{display:flex;align-items:center;gap:10px;padding:0 10px 22px 10px;}
+  .brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--run),#FF8A5B);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;}
+  .brand-name{font-weight:800;font-size:18px;letter-spacing:-0.02em;}
+  .navlink{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:var(--radius-sm);color:var(--text-dim);font-weight:600;font-size:14.5px;cursor:pointer;transition:background .15s,color .15s;}
+  .navlink svg{width:19px;height:19px;flex-shrink:0;}
+  .navlink:hover{background:var(--surface-2);color:var(--text);}
+  .navlink.active{background:var(--surface-2);color:var(--text);}
+  .navlink.active .navdot{background:var(--accent);}
+  .nav-spacer{flex:1;}
+  .nav-foot{padding:10px;font-size:12px;color:var(--text-faint);}
+
+  .bottomnav{display:none;}
+
+  /* ---------- Main ---------- */
+  .main{flex:1;min-width:0;padding:28px 34px 90px 34px;max-width:1180px;}
+  .page-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+  .page-title{font-size:26px;font-weight:800;letter-spacing:-0.02em;}
+  .page-sub{color:var(--text-dim);font-size:14px;margin-top:4px;}
+
+  .grid{display:grid;gap:16px;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:900px){.grid-3{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
+  @media(max-width:640px){.grid-3{grid-template-columns:1fr;}}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+  .card-title{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);font-weight:700;margin-bottom:14px;}
+  .card-title.row{display:flex;align-items:center;justify-content:space-between;}
+
+  .stat{display:flex;flex-direction:column;gap:6px;}
+  .stat-val{font-size:28px;font-weight:800;letter-spacing:-0.02em;}
+  .stat-label{font-size:12.5px;color:var(--text-dim);font-weight:600;}
+  .stat-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;}
+  .stat-icon svg{width:18px;height:18px;}
+
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.02em;}
+  .badge-run{background:rgba(255,91,46,.14);color:var(--run);}
+  .badge-lift{background:rgba(76,141,255,.14);color:var(--lift);}
+  .badge-fuel{background:rgba(62,213,152,.14);color:var(--fuel);}
+  .badge-rest{background:rgba(154,161,172,.14);color:var(--text-dim);}
+  .badge-warn{background:rgba(255,176,32,.14);color:var(--warn);}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-weight:700;font-size:13.5px;cursor:pointer;transition:transform .08s,background .15s;}
+  .btn:hover{background:var(--surface-3);}
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .btn-primary:hover{background:#ff6b41;}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--text-dim);}
+  .btn-ghost:hover{background:var(--surface-2);color:var(--text);}
+  .btn-sm{padding:7px 12px;font-size:12.5px;}
+  .btn-block{width:100%;}
+  .btn-danger{color:var(--danger);}
+  .btn[disabled]{opacity:.4;cursor:not-allowed;}
+
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .field label{font-size:12.5px;font-weight:700;color:var(--text-dim);}
+  .field input,.field select,.field textarea{
+    background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
+  .field-row{display:flex;gap:12px;}
+  .field-row .field{flex:1;}
+  .hint{font-size:12px;color:var(--text-faint);margin-top:2px;}
+
+  .choicegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+  .choice{border:1px solid var(--border);background:var(--surface-2);border-radius:10px;padding:12px;cursor:pointer;text-align:left;}
+  .choice.selected{border-color:var(--accent);background:rgba(255,91,46,.09);}
+  .choice-title{font-weight:700;font-size:13.5px;}
+  .choice-sub{font-size:11.5px;color:var(--text-dim);margin-top:2px;}
+
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--border);}
+  td{padding:10px 10px;font-size:13.5px;border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+
+  .weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+  @media(max-width:800px){.weekgrid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}}
+  .daycard{border:1px solid var(--border);background:var(--surface-2);border-radius:10px;padding:10px;min-height:96px;display:flex;flex-direction:column;gap:6px;}
+  .daycard.today{border-color:var(--accent);}
+  .daycard .dname{font-size:11px;font-weight:800;color:var(--text-dim);text-transform:uppercase;}
+  .daycard .dtype{font-size:12.5px;font-weight:700;}
+  .daycard .ddetail{font-size:11px;color:var(--text-dim);line-height:1.4;}
+
+  .ring-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+  .ring-center{position:absolute;text-align:center;}
+  .ring-center .v{font-size:20px;font-weight:800;}
+  .ring-center .l{font-size:10px;color:var(--text-dim);font-weight:600;}
+
+  .bar-track{background:var(--surface-3);border-radius:99px;height:8px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+
+  .list-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);gap:10px;}
+  .list-row:last-child{border-bottom:none;}
+  .list-row .lr-main{font-weight:700;font-size:13.5px;}
+  .list-row .lr-sub{font-size:12px;color:var(--text-dim);}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--surface-3);border:1px solid var(--border);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;max-width:480px;width:100%;max-height:88vh;overflow-y:auto;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .modal-head h3{font-size:17px;}
+  .x-close{cursor:pointer;color:var(--text-dim);font-size:20px;line-height:1;padding:4px;}
+
+  .tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--border);}
+  .tab{padding:9px 4px;margin-right:16px;font-size:13.5px;font-weight:700;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;}
+  .tab.active{color:var(--text);border-color:var(--accent);}
+
+  .empty{text-align:center;padding:30px 10px;color:var(--text-dim);font-size:13.5px;}
+
+  .onboard-shell{max-width:560px;margin:40px auto;padding:0 20px;}
+  .progress-dots{display:flex;gap:6px;margin-bottom:22px;}
+  .progress-dots span{height:5px;flex:1;background:var(--surface-3);border-radius:99px;}
+  .progress-dots span.done{background:var(--accent);}
+
+  .exrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .exrow:last-child{border-bottom:none;}
+  .exrow .exname{flex:1;font-weight:700;font-size:13.5px;}
+  .exrow .exscheme{font-size:12px;color:var(--text-dim);width:90px;text-align:right;}
+  .exrow input{width:64px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:7px 8px;font-size:13px;text-align:center;}
+
+  .exblock{padding:10px 0;border-bottom:1px solid var(--border);}
+  .exblock:last-child{border-bottom:none;}
+  .exblock .exname{font-weight:700;font-size:13.5px;margin-bottom:8px;}
+  .setrow{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .setrow .setlabel{width:46px;flex-shrink:0;font-size:11.5px;color:var(--text-dim);font-weight:700;}
+  .setrow input{width:64px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:7px 8px;font-size:13px;text-align:center;}
+
+  .chart-svg{width:100%;height:auto;display:block;}
+
+  @media(max-width:760px){
+    .sidebar{display:none;}
+    .main{padding:18px 16px 90px 16px;}
+    .bottomnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:100;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0));}
+    .bottomnav .navlink{flex:1;flex-direction:column;gap:3px;font-size:10.5px;text-align:center;padding:7px 2px;border-radius:9px;}
+    .bottomnav .navlink svg{width:19px;height:19px;}
+  }
+  .authshell{max-width:400px;margin:60px auto;padding:0 20px;}
+  .authcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;}
+  .authtabs{display:flex;gap:0;margin-bottom:20px;background:var(--surface-2);border-radius:10px;padding:3px;}
+  .authtab{flex:1;text-align:center;padding:9px;border-radius:8px;font-size:13px;font-weight:700;color:var(--text-dim);cursor:pointer;}
+  .authtab.active{background:var(--surface-3);color:var(--text);}
+  .plancard{border:1px solid var(--border);background:var(--surface-2);border-radius:14px;padding:22px;text-align:center;}
+  .plancard .price{font-size:36px;font-weight:800;margin:10px 0 2px;}
+  .plancard .price span{font-size:14px;color:var(--text-dim);font-weight:600;}
+  .feature-row{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text-dim);padding:6px 0;text-align:left;}
+  .feature-row svg{width:16px;height:16px;color:var(--fuel);flex-shrink:0;}
+  .banner{background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.3);color:var(--warn);border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;}
+  .err{background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.3);color:var(--danger);border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<div id="modal-root"></div>
+
+<!--
+  Supabase JS client (loaded from a CDN — this runs in each visitor's own
+  browser once the app is deployed, so it has nothing to do with any
+  network restriction in the environment that built this file).
+-->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* =========================================================================
+   PeakForm — Running + Lifting + Nutrition tracker (SaaS edition)
+   Local-first: the UI reads/writes localStorage instantly like before, and
+   a lightweight sync layer pushes the same state up to Supabase in the
+   background so accounts work across devices. Stripe gates access behind
+   a subscription. See /supabase/schema.sql and README.md for setup.
+   ========================================================================= */
+const STORE_KEY = "peakform_state_v1";
+
+/* ---------------- Cloud config ----------------
+   Fill these in from your Supabase project settings (Project Settings →
+   API). The anon key is safe to expose in client code by design — it only
+   ever acts within the permissions of the currently logged-in user thanks
+   to the Row Level Security policies in schema.sql. */
+const SUPABASE_URL = "https://xwzcpbvmnaelmxqxlohf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_oKr2nOQezixhdiUpsQhcAQ_dke4eXFq";
+// Guard against the CDN script failing to load (ad blocker, offline, etc.)
+// so a network hiccup degrades to "keys not configured" instead of a blank
+// white-screen crash.
+const supabaseClient = (SUPABASE_URL.startsWith("http") && typeof window.supabase !== "undefined")
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+let SESSION = null;        // current Supabase auth session (null = logged out)
+let SUBSCRIPTION = null;   // row from `subscriptions` table for this user
+let cloudPushTimer = null;
+let cloudSyncNote = "";    // small status string shown in Settings ("Synced just now" etc.)
+
+function isConfigured(){ return !!supabaseClient; }
+function hasActiveAccess(){
+  return SUBSCRIPTION && (SUBSCRIPTION.status === "active" || SUBSCRIPTION.status === "trialing");
+}
+const ICONS = {
+  dashboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
+  run:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="4" r="2"/><path d="M10 22l2-6 3 2 2-5"/><path d="M4 15l4-3 3 1 3-4-2-3-4 1"/></svg>',
+  lift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10M18 7v10M2 10v4M22 10v4M6 12h12"/></svg>',
+  fuel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a2 2 0 01-2 2H4a2 2 0 01-2-2V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.14.32.44.55.79.64.35.09.6.32.74.66.14.34.14.72 0 1.06"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+};
+
+/* ---------------- Storage ---------------- */
+function defaultState(){
+  return {
+    onboarded:false,
+    createdAt: todayISO(),
+    profile:{ name:"", sex:"female", age:30, heightCm:168, weightKg:65, activity:"moderate", goal:"maintain" },
+    running:{ goalType:"general", level:"beginner", daysPerWeek:3, startDate: todayISO(), weeksTotal:8, plan:null },
+    runLogs:[],
+    lifting:{ split:"full_body", level:"beginner", daysPerWeek:3, startDate: todayISO(), plan:null },
+    liftLogs:[],
+    nutrition:{ method:"auto", manual:{calories:2000,proteinG:130,carbsG:220,fatG:65} },
+    foodLogs:[],
+  };
+}
+let STATE = loadState();
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultState(), parsed);
+  }catch(e){ console.warn("Could not load saved data, starting fresh.", e); return defaultState(); }
+}
+function saveState(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(STATE));
+  queueCloudPush();
+}
+function resetAllData(){
+  localStorage.removeItem(STORE_KEY);
+  STATE = defaultState();
+  if(isConfigured() && SESSION){ supabaseClient.from("app_data").delete().eq("user_id", SESSION.user.id).then(()=>{}); }
+  navigate("#/onboarding");
+}
+
+/* ---------------- Cloud sync (Supabase) ----------------
+   Local-first: every UI action already writes to localStorage synchronously
+   via saveState() above, so the app never waits on the network to feel
+   responsive. This layer just mirrors the same JSON blob up to Supabase in
+   the background (debounced) so a login on a second device can pull it
+   back down. */
+function queueCloudPush(){
+  if(!isConfigured() || !SESSION) return;
+  clearTimeout(cloudPushTimer);
+  cloudPushTimer = setTimeout(pushCloudState, 1200);
+}
+async function pushCloudState(){
+  if(!isConfigured() || !SESSION) return;
+  try{
+    const { error } = await supabaseClient.from("app_data").upsert({
+      user_id: SESSION.user.id,
+      state: STATE,
+      updated_at: new Date().toISOString(),
+    });
+    if(error) throw error;
+    cloudSyncNote = "Synced " + new Date().toLocaleTimeString();
+  }catch(e){
+    console.warn("Cloud sync failed (your data is still safe locally):", e);
+    cloudSyncNote = "Sync failed — your data is still saved on this device";
+  }
+}
+async function pullCloudState(){
+  if(!isConfigured() || !SESSION) return;
+  try{
+    const { data, error } = await supabaseClient.from("app_data").select("state").eq("user_id", SESSION.user.id).maybeSingle();
+    if(error) throw error;
+    if(data && data.state && Object.keys(data.state).length){
+      // Cloud copy exists — it's the source of truth once you're logged in
+      // (covers logging in on a fresh device with empty localStorage).
+      STATE = Object.assign(defaultState(), data.state);
+      localStorage.setItem(STORE_KEY, JSON.stringify(STATE));
+    } else if(STATE.onboarded){
+      // First login on the device that already has local data — push it up.
+      await pushCloudState();
+    }
+  }catch(e){
+    console.warn("Could not reach cloud data, continuing with local copy:", e);
+  }
+}
+async function fetchSubscription(){
+  if(!isConfigured() || !SESSION){ SUBSCRIPTION = null; return; }
+  try{
+    const { data, error } = await supabaseClient.from("subscriptions").select("*").eq("user_id", SESSION.user.id).maybeSingle();
+    if(error) throw error;
+    SUBSCRIPTION = data || { status:"none" };
+  }catch(e){
+    console.warn("Could not check subscription status:", e);
+    SUBSCRIPTION = SUBSCRIPTION || { status:"none" };
+  }
+}
+
+/* ---------------- Auth ---------------- */
+async function signUpWithEmail(email, password){
+  const { data, error } = await supabaseClient.auth.signUp({ email, password });
+  if(error) throw error;
+  return data; // data.session is null if email confirmation is required
+}
+async function signInWithEmail(email, password){
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if(error) throw error;
+  return data;
+}
+async function signOutUser(){
+  if(isConfigured()) await supabaseClient.auth.signOut();
+  SESSION = null; SUBSCRIPTION = null;
+  location.hash = "";
+  render();
+}
+
+/* ---------------- Utils ---------------- */
+function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+function pad(n){ return n<10 ? "0"+n : ""+n; }
+function todayISO(){ const d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+function addDays(iso,n){ const d=parseISO(iso); d.setDate(d.getDate()+n); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function daysBetween(a,b){ return Math.round((parseISO(b)-parseISO(a))/86400000); }
+function mondayIndex(iso){ const jd = parseISO(iso).getDay(); return jd===0?6:jd-1; } // Mon=0..Sun=6
+function fmtDate(iso){ const d=parseISO(iso); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+function fmtDateLong(iso){ const d=parseISO(iso); return d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"}); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function round1(n){ return Math.round(n*10)/10; }
+/* ---------------- Unit conversion (app displays miles/lbs; all internal
+   math — training plan generation, macro formulas, dedupe — stays in
+   km/kg so nothing else has to change) ---------------- */
+function kmToMi(km){ return km * 0.621371; }
+function miToKm(mi){ return mi / 0.621371; }
+function kgToLb(kg){ return kg * 2.20462; }
+function lbToKg(lb){ return lb / 2.20462; }
+// Wraps a metric field (e.g. obj.weightKg) as a lbs/mi-facing field for
+// textField() to bind to, converting transparently on read and write.
+function unitField(realObj, realKey, toDisplay, toStore){
+  return {
+    get u(){ const v = realObj[realKey]; return (v===null||v===undefined||v==="") ? v : round1(toDisplay(v)); },
+    set u(v){ realObj[realKey] = toStore(parseFloat(v)||0); },
+  };
+}
+const DOW = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const DOW_FULL = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+function el(html){ const t=document.createElement("template"); t.innerHTML=html.trim(); return t.content.firstElementChild; }
+function esc(s){ return (s===undefined||s===null?"":String(s)).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ---------------- SVG chart helpers ---------------- */
+function svgRing(pct, color, size=88, stroke=9, label="", value=""){
+  const r = (size-stroke)/2, c = size/2, circ = 2*Math.PI*r;
+  const dash = clamp(pct,0,1.3)*circ;
+  return `
+  <div class="ring-wrap" style="width:${size}px;height:${size}px;">
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--surface-3)" stroke-width="${stroke}"/>
+      <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+        stroke-linecap="round" stroke-dasharray="${dash} ${circ}" transform="rotate(-90 ${c} ${c})"/>
+    </svg>
+    <div class="ring-center"><div class="v">${esc(value)}</div><div class="l">${esc(label)}</div></div>
+  </div>`;
+}
+function svgBars(data, color, opts={}){
+  // data: [{label, value}]
+  const w = opts.width||520, h = opts.height||140, pad=26, gap=10;
+  const max = Math.max(1, ...data.map(d=>d.value));
+  const bw = (w - pad*1.4) / data.length - gap;
+  let bars = "", labels="";
+  data.forEach((d,i)=>{
+    const bh = Math.max(2, (d.value/max) * (h-34));
+    const x = pad*0.6 + i*(bw+gap);
+    const y = h - 26 - bh;
+    bars += `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="4" fill="${d.highlight?color:color+'99'}"/>`;
+    labels += `<text x="${x+bw/2}" y="${h-8}" font-size="9.5" fill="var(--text-faint)" text-anchor="middle">${esc(d.label)}</text>`;
+    labels += `<text x="${x+bw/2}" y="${y-5}" font-size="10" fill="var(--text-dim)" text-anchor="middle">${d.value?round1(d.value):''}</text>`;
+  });
+  return `<svg class="chart-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${bars}${labels}</svg>`;
+}
+function svgLine(data, color, opts={}){
+  // data: [{label, value}]
+  const w = opts.width||520, h = opts.height||140, padL=34, padB=22, padT=14;
+  const vals = data.map(d=>d.value).filter(v=>v!=null);
+  if(!vals.length) return `<div class="empty">Not enough data yet</div>`;
+  const max = Math.max(...vals), min = Math.min(...vals);
+  const range = (max-min) || 1;
+  const stepX = (w-padL-14) / Math.max(1,(data.length-1));
+  let points = [];
+  data.forEach((d,i)=>{
+    if(d.value==null) return;
+    const x = padL + i*stepX;
+    const y = padT + (1-(d.value-min)/range) * (h-padT-padB);
+    points.push([x,y,d]);
+  });
+  const path = points.map((p,i)=>(i===0?"M":"L")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const dots = points.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="${color}"/>`).join("");
+  const labels = data.map((d,i)=>`<text x="${(padL+i*stepX).toFixed(1)}" y="${h-6}" font-size="9.5" fill="var(--text-faint)" text-anchor="middle">${esc(d.label)}</text>`).join("");
+  return `<svg class="chart-svg" viewBox="0 0 ${w} ${h}">
+    <text x="4" y="${padT+4}" font-size="9.5" fill="var(--text-faint)">${round1(max)}</text>
+    <text x="4" y="${h-padB}" font-size="9.5" fill="var(--text-faint)">${round1(min)}</text>
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}${labels}
+  </svg>`;
+}
+function barRow(label, pct, value, color){
+  return `<div style="margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-bottom:5px;">
+      <span>${esc(label)}</span><span>${esc(value)}</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" style="width:${clamp(pct,0,1)*100}%;background:${color};"></div></div>
+  </div>`;
+}
+
+/* =========================================================================
+   RUNNING PLAN GENERATOR
+   ========================================================================= */
+const RUN_GOALS = {
+  "5k":     { label:"5K Race",        weeks:6  },
+  "10k":    { label:"10K Race",       weeks:8  },
+  "half":   { label:"Half Marathon",  weeks:12 },
+  "marathon":{ label:"Marathon",      weeks:16 },
+  "general":{ label:"General Fitness / No Race Yet", weeks:8 },
+};
+const RUN_START_KM = { beginner:12, intermediate:24, advanced:38 };
+const RUN_CAP_KM = { "5k":30, "10k":46, "half":68, "marathon":88, general:50 };
+const INTERVAL_TEXT = {
+  base:"6 x 400m @ 5K effort, 90s jog recovery",
+  build:"5 x 800m @ 10K effort, 2min jog recovery",
+  peak:"4 x 1000m @ goal race pace, 2min jog recovery",
+};
+const TEMPO_TEXT = {
+  base:"15 min easy + 10 min @ comfortably hard + 10 min easy",
+  build:"15 min easy + 20 min @ comfortably hard + 10 min easy",
+  peak:"10 min easy + 25 min @ goal race pace + 10 min easy",
+};
+
+function schedulePattern(daysPerWeek){
+  // returns array of 7 booleans-ish: which weekday indices (0=Mon) are run days, marks long-run day
+  switch(daysPerWeek){
+    case 2: return { days:[1,5], long:5 };            // Tue, Sat(long)
+    case 3: return { days:[1,3,5], long:5 };           // Tue, Thu, Sat
+    case 4: return { days:[0,2,4,6], long:6 };         // Mon,Wed,Fri,Sun(long)
+    case 5: return { days:[0,1,3,4,6], long:6 };
+    case 6: return { days:[0,1,2,3,4,6], long:6 };
+    default:return { days:[1,3,5], long:5 };
+  }
+}
+
+function generateRunningPlan(cfg){
+  const { goalType, level, daysPerWeek, startDate, weeksTotal } = cfg;
+  const weeks = weeksTotal || RUN_GOALS[goalType].weeks;
+  const cap = RUN_CAP_KM[goalType] || 50;
+  const { days, long } = schedulePattern(daysPerWeek);
+  const isRace = goalType!=="general";
+  let weeklyTotal = RUN_START_KM[level] || 15;
+  const plan = [];
+  for(let w=0; w<weeks; w++){
+    const weekNum = w+1;
+    const isRecovery = (weekNum%4===0) && weekNum!==weeks;
+    const isTaper1 = isRace && weekNum===weeks-1;
+    const isRaceWeek = isRace && weekNum===weeks;
+    let phase = weekNum <= Math.ceil(weeks*0.4) ? "base" : (weekNum <= Math.ceil(weeks*0.75) ? "build" : "peak");
+
+    if(w>0){
+      if(isRecovery) weeklyTotal = weeklyTotal*0.75;
+      else if(isTaper1) weeklyTotal = weeklyTotal*0.65;
+      else if(isRaceWeek) weeklyTotal = weeklyTotal*0.45;
+      else weeklyTotal = Math.min(cap, weeklyTotal*1.08);
+    }
+    weeklyTotal = Math.max(RUN_START_KM[level]*0.5, weeklyTotal);
+
+    const longKm = round1(weeklyTotal*0.32);
+    const tempoKm = round1(weeklyTotal*0.15);
+    const numRunDays = days.length;
+    const hasQuality = level!=="beginner" || daysPerWeek>=4;
+    // figure out which of the run-day slots are: long, tempo(optional), interval(optional), rest easy
+    const daySlots = days.map(d=>({dow:d, type:"easy"}));
+    const longSlot = daySlots.find(s=>s.dow===long) || daySlots[daySlots.length-1];
+    longSlot.type = isRaceWeek ? "race" : "long";
+    if(hasQuality && daySlots.length>=3){
+      const others = daySlots.filter(s=>s!==longSlot);
+      others[0].type = "tempo";
+      if(others.length>2) others[1].type = "intervals";
+    }
+    const weekDays = [];
+    for(let dow=0; dow<7; dow++){
+      const slot = daySlots.find(s=>s.dow===dow);
+      if(!slot){ weekDays.push({dow,type:"rest",label:"Rest",detail:"Recovery / mobility"}); continue; }
+      if(slot.type==="long"){
+        weekDays.push({dow,type:"long",label:"Long Run",detail:`${round1(kmToMi(longKm))} mi easy pace`});
+      } else if(slot.type==="race"){
+        weekDays.push({dow,type:"race",label:"RACE DAY 🏁",detail:`Goal: ${RUN_GOALS[goalType].label}`});
+      } else if(slot.type==="tempo"){
+        weekDays.push({dow,type:"tempo",label:"Tempo Run",detail:TEMPO_TEXT[phase]});
+      } else if(slot.type==="intervals"){
+        weekDays.push({dow,type:"intervals",label:"Intervals",detail:INTERVAL_TEXT[phase]});
+      } else {
+        const easyKm = round1(Math.max(3, (weeklyTotal - longKm - (hasQuality?tempoKm:0)) / Math.max(1,numRunDays-1-(hasQuality?1:0)+0.001)));
+        weekDays.push({dow,type:"easy",label:"Easy Run",detail:`${round1(kmToMi(easyKm||4))} mi conversational pace`});
+      }
+    }
+    plan.push({ weekNum, weekStart: addDays(startDate, w*7), totalKm: round1(weeklyTotal), phase, isRecovery, days: weekDays });
+  }
+  return plan;
+}
+
+function currentRunWeek(running){
+  if(!running.plan) return null;
+  const idx = Math.floor(daysBetween(running.startDate, todayISO())/7);
+  return running.plan[clamp(idx,0,running.plan.length-1)];
+}
+function todaysRun(running){
+  const wk = currentRunWeek(running);
+  if(!wk) return null;
+  const dow = mondayIndex(todayISO());
+  const idxInPlanWeek = Math.floor(daysBetween(running.startDate, todayISO())/7);
+  if(idxInPlanWeek<0 || idxInPlanWeek>=running.plan.length) return null;
+  return wk.days.find(d=>d.dow===dow) || null;
+}
+
+/* =========================================================================
+   LIFTING PLAN GENERATOR
+   ========================================================================= */
+const EX = {
+  squat:["Back Squat","Front Squat","Goblet Squat","Leg Press","Hack Squat","Bulgarian Split Squat"],
+  hinge:["Romanian Deadlift","Conventional Deadlift","Hip Thrust","Sumo Deadlift","Good Morning"],
+  pushH:["Barbell Bench Press","Dumbbell Bench Press","Push-Up","Incline Dumbbell Press","Machine Chest Press"],
+  pushV:["Overhead Press","Dumbbell Shoulder Press","Arnold Press","Machine Shoulder Press"],
+  pullH:["Barbell Row","Dumbbell Row","Seated Cable Row","T-Bar Row","Chest-Supported Row"],
+  pullV:["Lat Pulldown","Pull-Up / Chin-Up","Assisted Pull-Up","Straight-Arm Pulldown"],
+  lunge:["Walking Lunge","Bulgarian Split Squat","Reverse Lunge","Step-Up"],
+  core:["Plank (sec)","Hanging Leg Raise","Cable Crunch","Ab Wheel Rollout","Weighted Sit-Up"],
+  bicep:["Barbell Curl","Dumbbell Curl","Hammer Curl","Preacher Curl","Cable Curl"],
+  tricep:["Triceps Pushdown","Overhead Triceps Extension","Skull Crusher","Close-Grip Bench Press"],
+  lateral:["Lateral Raise","Cable Lateral Raise","Machine Lateral Raise"],
+  face:["Face Pull","Rear Delt Fly","Reverse Pec Deck"],
+  calf:["Standing Calf Raise","Seated Calf Raise","Leg Press Calf Raise"],
+};
+function pick(arr, seed){ return arr[seed % arr.length]; }
+// Stable hash so each person's plan draws from a different starting point
+// in each exercise pool (based on their own split/level/start date) instead
+// of everyone getting the exact same "Back Squat, Bench, Row" every time.
+function seedFromString(s){
+  let h=0; for(let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; }
+  return h;
+}
+const LEVEL_SCHEME = {
+  beginner:{ compound:{sets:3,reps:"8-10"}, accessory:{sets:3,reps:"12-15"} },
+  intermediate:{ compound:{sets:4,reps:"6-10"}, accessory:{sets:3,reps:"10-12"} },
+  advanced:{ compound:{sets:5,reps:"3-6"}, accessory:{sets:4,reps:"8-12"} },
+};
+function mkEx(pool, seed, level, kind){
+  const scheme = LEVEL_SCHEME[level][kind];
+  return { name: pick(pool, seed), sets: scheme.sets, reps: scheme.reps, kind };
+}
+
+function buildDay(name, exercises){ return { name, exercises }; }
+
+function liftingTemplates(split, level, rot=0){
+  if(split==="full_body"){
+    return [
+      buildDay("Full Body A",[mkEx(EX.squat,0+rot,level,"compound"),mkEx(EX.pushH,0+rot,level,"compound"),mkEx(EX.pullH,0+rot,level,"compound"),mkEx(EX.core,0+rot,level,"accessory")]),
+      buildDay("Full Body B",[mkEx(EX.hinge,0+rot,level,"compound"),mkEx(EX.pushV,0+rot,level,"compound"),mkEx(EX.pullV,0+rot,level,"compound"),mkEx(EX.calf,0+rot,level,"accessory")]),
+      buildDay("Full Body C",[mkEx(EX.lunge,0+rot,level,"compound"),mkEx(EX.pushH,1+rot,level,"compound"),mkEx(EX.pullH,1+rot,level,"compound"),mkEx(EX.bicep,0+rot,level,"accessory"),mkEx(EX.tricep,0+rot,level,"accessory")]),
+    ];
+  }
+  if(split==="upper_lower"){
+    return [
+      buildDay("Upper A",[mkEx(EX.pushH,0+rot,level,"compound"),mkEx(EX.pullH,0+rot,level,"compound"),mkEx(EX.pushV,0+rot,level,"accessory"),mkEx(EX.pullV,0+rot,level,"accessory"),mkEx(EX.bicep,0+rot,level,"accessory")]),
+      buildDay("Lower A",[mkEx(EX.squat,0+rot,level,"compound"),mkEx(EX.hinge,0+rot,level,"compound"),mkEx(EX.lunge,0+rot,level,"accessory"),mkEx(EX.core,0+rot,level,"accessory")]),
+      buildDay("Upper B",[mkEx(EX.pushV,0+rot,level,"compound"),mkEx(EX.pullV,1+rot,level,"compound"),mkEx(EX.pushH,1+rot,level,"accessory"),mkEx(EX.pullH,1+rot,level,"accessory"),mkEx(EX.lateral,0+rot,level,"accessory")]),
+      buildDay("Lower B",[mkEx(EX.hinge,1+rot,level,"compound"),mkEx(EX.squat,2+rot,level,"compound"),mkEx(EX.calf,0+rot,level,"accessory"),mkEx(EX.core,1+rot,level,"accessory")]),
+    ];
+  }
+  // push/pull/legs
+  return [
+    buildDay("Push",[mkEx(EX.pushH,0+rot,level,"compound"),mkEx(EX.pushV,0+rot,level,"compound"),mkEx(EX.lateral,0+rot,level,"accessory"),mkEx(EX.tricep,0+rot,level,"accessory")]),
+    buildDay("Pull",[mkEx(EX.pullV,0+rot,level,"compound"),mkEx(EX.pullH,0+rot,level,"compound"),mkEx(EX.face,0+rot,level,"accessory"),mkEx(EX.bicep,0+rot,level,"accessory")]),
+    buildDay("Legs",[mkEx(EX.squat,0+rot,level,"compound"),mkEx(EX.hinge,0+rot,level,"compound"),mkEx(EX.lunge,0+rot,level,"accessory"),mkEx(EX.calf,0+rot,level,"accessory")]),
+  ];
+}
+
+function generateLiftingPlan(cfg){
+  const { split, level, daysPerWeek, startDate } = cfg;
+  const rot = seedFromString(startDate+"|"+split+"|"+level) % 3;
+  const templates = liftingTemplates(split, level, rot);
+  // repeat templates to fill daysPerWeek, and choose weekday slots spread across the week
+  const slotsByCount = {
+    2:[1,4], 3:[0,2,4], 4:[0,1,3,4], 5:[0,1,2,4,5], 6:[0,1,2,3,4,5],
+  };
+  const dows = slotsByCount[daysPerWeek] || [0,2,4];
+  const days = dows.map((dow,i)=>({ dow, template: templates[i % templates.length] }));
+  return { templates, days, startDate };
+}
+function todaysLift(lifting){
+  if(!lifting.plan) return null;
+  const dow = mondayIndex(todayISO());
+  const slot = lifting.plan.days.find(d=>d.dow===dow);
+  return slot ? slot.template : null;
+}
+
+/* =========================================================================
+   NUTRITION
+   ========================================================================= */
+const ACTIVITY_MULT = { sedentary:1.2, light:1.375, moderate:1.55, active:1.725, very_active:1.9 };
+function calcMacroGoals(profile){
+  const {sex, age, heightCm, weightKg, activity, goal} = profile;
+  let bmr;
+  if(sex==="male") bmr = 10*weightKg + 6.25*heightCm - 5*age + 5;
+  else if(sex==="female") bmr = 10*weightKg + 6.25*heightCm - 5*age - 161;
+  else bmr = 10*weightKg + 6.25*heightCm - 5*age - 78;
+  const tdee = bmr * (ACTIVITY_MULT[activity]||1.4);
+  let cals = tdee;
+  if(goal==="lose") cals = tdee*0.8;
+  else if(goal==="gain") cals = tdee*1.12;
+  const proteinG = Math.round(weightKg*2.0);
+  const fatG = Math.round((cals*0.25)/9);
+  const carbsG = Math.max(50, Math.round((cals - proteinG*4 - fatG*9)/4));
+  return { calories: Math.round(cals), proteinG, carbsG, fatG };
+}
+function activeMacroGoals(){
+  return STATE.nutrition.method==="manual" ? STATE.nutrition.manual : calcMacroGoals(STATE.profile);
+}
+function foodTotalsFor(dateISO){
+  const entries = STATE.foodLogs.filter(f=>f.date===dateISO);
+  return entries.reduce((a,f)=>({calories:a.calories+f.calories, proteinG:a.proteinG+f.proteinG, carbsG:a.carbsG+f.carbsG, fatG:a.fatG+f.fatG}), {calories:0,proteinG:0,carbsG:0,fatG:0});
+}
+
+/* =========================================================================
+   DERIVED STATS
+   ========================================================================= */
+function last7Days(){ const out=[]; for(let i=6;i>=0;i--) out.push(addDays(todayISO(),-i)); return out; }
+function weekStartFor(dateISO){ return addDays(dateISO, -mondayIndex(dateISO)); }
+function thisWeekRange(){ const start = weekStartFor(todayISO()); return [start, addDays(start,6)]; }
+
+function runKmInRange(startISO,endISO){
+  return STATE.runLogs.filter(r=>r.date>=startISO && r.date<=endISO).reduce((s,r)=>s+r.distanceKm,0);
+}
+// Normalizes a logged exercise into an array of {weight,reps} per set.
+// Sessions are logged per-set now, but this also reads older sessions that
+// stored one weight/reps applied across a set count, so nothing breaks.
+function setsArrayOf(e){
+  if(Array.isArray(e.sets)) return e.sets;
+  const n = e.sets||1;
+  return Array.from({length:n}, ()=>({weight:e.weight||0, reps:e.reps||0}));
+}
+function liftVolumeInRange(startISO,endISO){
+  return STATE.liftLogs.filter(l=>l.date>=startISO && l.date<=endISO)
+    .reduce((s,l)=> s + l.exercises.reduce((s2,e)=> s2 + setsArrayOf(e).reduce((s3,st)=>s3+(st.weight*st.reps),0), 0), 0);
+}
+function currentStreak(){
+  let streak = 0;
+  let d = todayISO();
+  const hasActivity = (day)=> STATE.runLogs.some(r=>r.date===day) || STATE.liftLogs.some(l=>l.date===day) || STATE.foodLogs.some(f=>f.date===day);
+  // don't break streak just because today has no entry yet; start checking from today, allow today to be empty
+  if(!hasActivity(d)) d = addDays(d,-1);
+  while(hasActivity(d)){ streak++; d = addDays(d,-1); }
+  return streak;
+}
+function last4WeeksRunData(){
+  const out=[];
+  for(let i=3;i>=0;i--){
+    const start = addDays(weekStartFor(todayISO()), -7*i);
+    const end = addDays(start,6);
+    out.push({ label:"W"+fmtDate(start).replace(" ",""), value: round1(kmToMi(runKmInRange(start,end))), highlight:i===0 });
+  }
+  return out;
+}
+function last4WeeksLiftData(){
+  const out=[];
+  for(let i=3;i>=0;i--){
+    const start = addDays(weekStartFor(todayISO()), -7*i);
+    const end = addDays(start,6);
+    out.push({ label:"W"+fmtDate(start).replace(" ",""), value: Math.round(kgToLb(liftVolumeInRange(start,end))/1000), highlight:i===0 });
+  }
+  return out;
+}
+function estOneRM(weight,reps){ return weight*(1+reps/30); }
+function strengthHistoryFor(exerciseName){
+  const pts=[];
+  STATE.liftLogs.filter(l=>l.exercises.some(e=>e.name===exerciseName)).sort((a,b)=>a.date<b.date?-1:1)
+    .forEach(l=>{
+      let best = null;
+      l.exercises.filter(e=>e.name===exerciseName).forEach(e=>{
+        setsArrayOf(e).forEach(st=>{
+          if(st.weight>0 && (!best || estOneRM(st.weight,st.reps) > estOneRM(best.weight,best.reps))) best = st;
+        });
+      });
+      if(best) pts.push({ label: fmtDate(l.date), value: round1(kgToLb(estOneRM(best.weight,best.reps))) });
+    });
+  return pts.slice(-8);
+}
+function mainLiftNames(){
+  const names = new Set();
+  STATE.liftLogs.forEach(l=>l.exercises.forEach(e=>names.add(e.name)));
+  return Array.from(names).slice(0,3);
+}
+
+/* =========================================================================
+   ROUTER
+   ========================================================================= */
+const ROUTES = {
+  "#/dashboard": renderDashboard,
+  "#/running": renderRunning,
+  "#/lifting": renderLifting,
+  "#/nutrition": renderNutrition,
+  "#/settings": renderSettings,
+  "#/onboarding": renderOnboarding,
+};
+function navigate(hash){ if(location.hash===hash) render(); else location.hash = hash; }
+function currentRoute(){ return location.hash || "#/dashboard"; }
+
+function render(){
+  const app = document.getElementById("app");
+  const route = currentRoute();
+
+  // Cloud gating: only applies once real Supabase keys are configured. Until
+  // then the app behaves exactly like the original local-only version, so
+  // it's never broken mid-setup.
+  if(isConfigured()){
+    if(!SESSION){
+      app.innerHTML = "";
+      app.appendChild(renderAuthScreen());
+      return;
+    }
+    if(!hasActiveAccess()){
+      app.innerHTML = "";
+      app.appendChild(renderPaywallScreen());
+      return;
+    }
+  }
+
+  if(!STATE.onboarded && route!=="#/onboarding"){ location.hash = "#/onboarding"; return; }
+  if(STATE.onboarded && route==="#/onboarding"){ location.hash = "#/dashboard"; return; }
+
+  if(route==="#/onboarding"){
+    app.innerHTML = "";
+    app.appendChild(renderOnboarding());
+    return;
+  }
+
+  app.innerHTML = "";
+  const shell = document.createElement("div");
+  shell.style.display = "contents";
+  shell.appendChild(buildSidebar(route));
+  const main = document.createElement("div");
+  main.className = "main";
+  const fn = ROUTES[route] || renderDashboard;
+  main.appendChild(fn());
+  shell.appendChild(main);
+  shell.appendChild(buildBottomNav(route));
+  app.appendChild(shell);
+}
+window.addEventListener("hashchange", render);
+
+function navItems(){
+  return [
+    {href:"#/dashboard", icon:ICONS.dashboard, label:"Dashboard"},
+    {href:"#/running", icon:ICONS.run, label:"Running"},
+    {href:"#/lifting", icon:ICONS.lift, label:"Lifting"},
+    {href:"#/nutrition", icon:ICONS.fuel, label:"Nutrition"},
+    {href:"#/settings", icon:ICONS.settings, label:"Settings"},
+  ];
+}
+function buildSidebar(route){
+  const wrap = el(`<div class="sidebar"></div>`);
+  wrap.appendChild(el(`<div class="brand"><div class="brand-mark">PF</div><div class="brand-name">PeakForm</div></div>`));
+  navItems().forEach(item=>{
+    const a = el(`<a class="navlink ${route===item.href?'active':''}" href="${item.href}">${item.icon}<span>${item.label}</span></a>`);
+    wrap.appendChild(a);
+  });
+  wrap.appendChild(el(`<div class="nav-spacer"></div>`));
+  const streak = currentStreak();
+  wrap.appendChild(el(`<div class="nav-foot">${streak>0 ? `🔥 ${streak}-day streak` : "Log something today to start a streak"}</div>`));
+  return wrap;
+}
+function buildBottomNav(route){
+  const wrap = el(`<div class="bottomnav"></div>`);
+  navItems().forEach(item=>{
+    const a = el(`<a class="navlink ${route===item.href?'active':''}" href="${item.href}">${item.icon}<span>${item.label}</span></a>`);
+    wrap.appendChild(a);
+  });
+  return wrap;
+}
+
+/* =========================================================================
+   AUTH SCREEN (sign up / log in)
+   ========================================================================= */
+let authTab = "signup";
+let authError = "";
+let authPendingConfirm = false;
+function renderAuthScreen(){
+  const wrap = el(`<div class="authshell"></div>`);
+  wrap.appendChild(el(`<div class="brand" style="padding-left:0;justify-content:center;"><div class="brand-mark">PF</div><div class="brand-name">PeakForm</div></div>`));
+  const card = el(`<div class="authcard"></div>`);
+
+  if(authPendingConfirm){
+    card.appendChild(el(`<h2 style="margin-bottom:10px;">Check your email 📬</h2>`));
+    card.appendChild(el(`<p class="page-sub" style="margin-bottom:16px;">We sent a confirmation link to finish creating your account. Click it, then come back here and log in.</p>`));
+    const backBtn = el(`<button class="btn btn-block">Back to log in</button>`);
+    backBtn.addEventListener("click", ()=>{ authPendingConfirm=false; authTab="login"; render(); });
+    card.appendChild(backBtn);
+    wrap.appendChild(card);
+    return wrap;
+  }
+
+  const tabs = el(`<div class="authtabs"></div>`);
+  const loginTab = el(`<div class="authtab ${authTab==='login'?'active':''}">Log In</div>`);
+  const signupTab = el(`<div class="authtab ${authTab==='signup'?'active':''}">Sign Up</div>`);
+  loginTab.addEventListener("click", ()=>{ authTab="login"; authError=""; render(); });
+  signupTab.addEventListener("click", ()=>{ authTab="signup"; authError=""; render(); });
+  tabs.appendChild(loginTab); tabs.appendChild(signupTab);
+  card.appendChild(tabs);
+
+  if(authError) card.appendChild(el(`<div class="err">${esc(authError)}</div>`));
+
+  const form = el(`<form></form>`); form.noValidate = true;
+  const emailF = {email:""};
+  form.appendChild(textField("Email", emailF, "email", "email"));
+  const passF = {password:""};
+  form.appendChild(textField("Password", passF, "password", "password", {hint: authTab==="signup" ? "At least 6 characters" : undefined}));
+  const btn = submitBtn(authTab==="signup" ? "Create Account" : "Log In");
+  form.appendChild(btn);
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    authError = "";
+    btn.disabled = true; btn.textContent = "Please wait…";
+    try{
+      if(authTab==="signup"){
+        if(!emailF.email || passF.password.length<6){ throw new Error("Enter a valid email and a password of at least 6 characters."); }
+        const data = await signUpWithEmail(emailF.email, passF.password);
+        if(!data.session){ authPendingConfirm = true; render(); return; }
+        SESSION = data.session;
+      } else {
+        const data = await signInWithEmail(emailF.email, passF.password);
+        SESSION = data.session;
+      }
+      await pullCloudState();
+      await fetchSubscription();
+      render();
+    }catch(err){
+      authError = err.message || "Something went wrong. Please try again.";
+      btn.disabled = false; btn.textContent = authTab==="signup" ? "Create Account" : "Log In";
+      render();
+    }
+  });
+  card.appendChild(form);
+  wrap.appendChild(card);
+  wrap.appendChild(el(`<p class="hint" style="text-align:center;margin-top:16px;">Your workouts and meals sync securely to your account and stay private to you.</p>`));
+  return wrap;
+}
+
+/* =========================================================================
+   PAYWALL / SUBSCRIBE SCREEN
+   ========================================================================= */
+async function startCheckout(btn){
+  btn.disabled = true; btn.textContent = "Redirecting to checkout…";
+  try{
+    const res = await fetch("/api/create-checkout-session", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ userId: SESSION.user.id, email: SESSION.user.email }),
+    });
+    if(!res.ok) throw new Error("Could not start checkout (" + res.status + ")");
+    const { url } = await res.json();
+    window.location.href = url;
+  }catch(e){
+    toast("Checkout is not set up yet — see README.md to add your Stripe keys.");
+    btn.disabled = false; btn.textContent = "Start Free Trial";
+  }
+}
+function renderPaywallScreen(){
+  const wrap = el(`<div class="authshell" style="max-width:440px;"></div>`);
+  wrap.appendChild(el(`<div class="brand" style="padding-left:0;justify-content:center;"><div class="brand-mark">PF</div><div class="brand-name">PeakForm</div></div>`));
+
+  const params = new URLSearchParams(location.search);
+  if(params.get("checkout")==="success"){
+    wrap.appendChild(el(`<div class="banner">Payment received — activating your account… this can take a few seconds.</div>`));
+  }
+
+  const card = el(`<div class="plancard"></div>`);
+  card.appendChild(el(`<div class="badge badge-run" style="margin:0 auto;width:fit-content;">MEMBERSHIP</div>`));
+  card.appendChild(el(`<div class="price">$6.99<span>/month</span></div>`));
+  card.appendChild(el(`<div class="hint" style="margin-bottom:14px;">7-day free trial, cancel anytime</div>`));
+  [
+    "Personalized running plan (5K to marathon)",
+    "Full weightlifting program & progress tracking",
+    "Macro & nutrition tracking",
+    "Garmin / Apple Watch run import",
+    "Synced across all your devices",
+  ].forEach(f=> card.appendChild(el(`<div class="feature-row">${ICONS.check}<span>${esc(f)}</span></div>`)));
+  const subBtn = el(`<button class="btn btn-primary btn-block" style="margin-top:16px;">Start Free Trial</button>`);
+  subBtn.addEventListener("click", ()=>startCheckout(subBtn));
+  card.appendChild(subBtn);
+  wrap.appendChild(card);
+
+  const row = el(`<div style="display:flex;justify-content:space-between;margin-top:16px;"></div>`);
+  const refreshBtn = el(`<button class="btn btn-ghost btn-sm">Already subscribed? Refresh status</button>`);
+  refreshBtn.addEventListener("click", async ()=>{ await fetchSubscription(); render(); });
+  const logoutBtn = el(`<button class="btn btn-ghost btn-sm">Log out</button>`);
+  logoutBtn.addEventListener("click", signOutUser);
+  row.appendChild(refreshBtn); row.appendChild(logoutBtn);
+  wrap.appendChild(row);
+  return wrap;
+}
+
+/* =========================================================================
+   ONBOARDING
+   ========================================================================= */
+let ONB = null;
+function freshOnboardDraft(){
+  const d = defaultState();
+  return { step:0, profile:d.profile, running:d.running, lifting:d.lifting, nutrition:d.nutrition };
+}
+function choiceGrid(field, options, current, cols){
+  const grid = el(`<div class="choicegrid" style="${cols?`grid-template-columns:repeat(${cols},1fr);`:''}"></div>`);
+  options.forEach(opt=>{
+    const btn = el(`<button type="button" class="choice ${current===opt.value?'selected':''}">
+        <div class="choice-title">${esc(opt.title)}</div>
+        ${opt.sub?`<div class="choice-sub">${esc(opt.sub)}</div>`:''}
+      </button>`);
+    btn.addEventListener("click", ()=>{
+      field.obj[field.key] = opt.value;
+      render();
+    });
+    grid.appendChild(btn);
+  });
+  return grid;
+}
+function textField(label, obj, key, type="text", opts={}){
+  const wrap = el(`<div class="field"><label>${esc(label)}</label></div>`);
+  const input = document.createElement(type==="select" ? "select" : "input");
+  if(type==="select"){
+    (opts.options||[]).forEach(o=>{
+      const optEl = document.createElement("option");
+      optEl.value=o.value; optEl.textContent=o.label;
+      if(obj[key]===o.value) optEl.selected=true;
+      input.appendChild(optEl);
+    });
+    input.addEventListener("change", ()=>{ obj[key]=input.value; });
+  } else {
+    input.type = type;
+    input.value = obj[key];
+    if(type==="number") input.step = "any"; // allow decimals (e.g. 8.2 km) - default step=1 silently blocks submission otherwise
+    if(opts.min!=null) input.min=opts.min;
+    if(opts.max!=null) input.max=opts.max;
+    input.addEventListener("input", ()=>{ obj[key] = type==="number" ? parseFloat(input.value)||0 : input.value; });
+  }
+  wrap.appendChild(input);
+  if(opts.hint) wrap.appendChild(el(`<div class="hint">${esc(opts.hint)}</div>`));
+  return wrap;
+}
+
+function renderOnboarding(){
+  if(!ONB) ONB = freshOnboardDraft();
+  const wrap = el(`<div class="onboard-shell"></div>`);
+  const totalSteps = 5;
+  const dots = el(`<div class="progress-dots"></div>`);
+  for(let i=0;i<totalSteps;i++) dots.appendChild(el(`<span class="${i<=ONB.step?'done':''}"></span>`));
+  wrap.appendChild(el(`<div class="brand" style="padding-left:0;"><div class="brand-mark">PF</div><div class="brand-name">PeakForm</div></div>`));
+  wrap.appendChild(dots);
+
+  const card = el(`<div class="card"></div>`);
+  wrap.appendChild(card);
+
+  if(ONB.step===0){
+    card.appendChild(el(`<h2 style="margin-bottom:4px;">Welcome 👋</h2>`));
+    card.appendChild(el(`<p class="page-sub" style="margin-bottom:18px;">Let's set up your training profile. This takes about a minute and creates your personalized running plan, lifting program, and macro targets.</p>`));
+    card.appendChild(textField("Your name", ONB.profile, "name", "text", {hint:"Just for your dashboard greeting"}));
+    const row = el(`<div class="field-row"></div>`);
+    row.appendChild(textField("Age", ONB.profile, "age", "number", {min:13,max:90}));
+    row.appendChild(textField("Sex", ONB.profile, "sex", "select", {options:[{value:"female",label:"Female"},{value:"male",label:"Male"},{value:"other",label:"Other"}]}));
+    card.appendChild(row);
+    const row2 = el(`<div class="field-row"></div>`);
+    row2.appendChild(textField("Height (cm)", ONB.profile, "heightCm", "number", {min:120,max:230}));
+    row2.appendChild(textField("Weight (lbs)", unitField(ONB.profile,"weightKg",kgToLb,lbToKg), "u", "number", {min:66,max:551}));
+    card.appendChild(row2);
+  }
+
+  if(ONB.step===1){
+    card.appendChild(el(`<h2 style="margin-bottom:4px;">Your activity & goal</h2>`));
+    card.appendChild(el(`<p class="page-sub" style="margin-bottom:18px;">This tunes your calorie and macro targets.</p>`));
+    card.appendChild(el(`<div class="field"><label>Daily activity level (outside of training)</label></div>`));
+    card.appendChild(choiceGrid({obj:ONB.profile,key:"activity"}, [
+      {value:"sedentary",title:"Sedentary",sub:"Desk job, little walking"},
+      {value:"light",title:"Light",sub:"On feet sometimes"},
+      {value:"moderate",title:"Moderate",sub:"On feet often"},
+      {value:"active",title:"Active",sub:"Physical job"},
+      {value:"very_active",title:"Very Active",sub:"Physically demanding"},
+    ], ONB.profile.activity, 2));
+    card.appendChild(el(`<div style="height:16px;"></div>`));
+    card.appendChild(el(`<div class="field"><label>Primary goal</label></div>`));
+    card.appendChild(choiceGrid({obj:ONB.profile,key:"goal"}, [
+      {value:"lose",title:"Lose Fat",sub:"Calorie deficit"},
+      {value:"maintain",title:"Maintain",sub:"Stay the same"},
+      {value:"gain",title:"Build Muscle",sub:"Calorie surplus"},
+    ], ONB.profile.goal, 3));
+  }
+
+  if(ONB.step===2){
+    card.appendChild(el(`<h2 style="margin-bottom:4px;">Running program</h2>`));
+    card.appendChild(el(`<p class="page-sub" style="margin-bottom:18px;">We'll build a week-by-week plan around this.</p>`));
+    card.appendChild(el(`<div class="field"><label>What are you training for?</label></div>`));
+    card.appendChild(choiceGrid({obj:ONB.running,key:"goalType"}, Object.keys(RUN_GOALS).map(k=>({value:k,title:RUN_GOALS[k].label,sub:k==="general"?"Ongoing plan":`${RUN_GOALS[k].weeks} weeks`})), ONB.running.goalType, 2));
+    card.appendChild(el(`<div style="height:16px;"></div>`));
+    card.appendChild(el(`<div class="field"><label>Running experience</label></div>`));
+    card.appendChild(choiceGrid({obj:ONB.running,key:"level"}, [
+      {value:"beginner",title:"Beginner",sub:"New or returning"},
+      {value:"intermediate",title:"Intermediate",sub:"Regular runner"},
+      {value:"advanced",title:"Advanced",sub:"Experienced"},
+    ], ONB.running.level, 3));
+    card.appendChild(el(`<div style="height:16px;"></div>`));
+    card.appendChild(textField("Run days per week", ONB.running, "daysPerWeek", "select", {options:[2,3,4,5,6].map(n=>({value:n,label:n+" days/week"}))}));
+    card.appendChild(textField("Plan start date", ONB.running, "startDate", "date"));
+  }
+
+  if(ONB.step===3){
+    card.appendChild(el(`<h2 style="margin-bottom:4px;">Weightlifting program</h2>`));
+    card.appendChild(el(`<p class="page-sub" style="margin-bottom:18px;">Pick a split and we'll build your weekly routine.</p>`));
+    card.appendChild(el(`<div class="field"><label>Split style</label></div>`));
+    card.appendChild(choiceGrid({obj:ONB.lifting,key:"split"}, [
+      {value:"full_body",title:"Full Body",sub:"2-3 days/week"},
+      {value:"upper_lower",title:"Upper / Lower",sub:"4 days/week"},
+      {value:"ppl",title:"Push/Pull/Legs",sub:"3 or 6 days/week"},
+    ], ONB.lifting.split, 3));
+    card.appendChild(el(`<div style="height:16px;"></div>`));
+    card.appendChild(el(`<div class="field"><label>Lifting experience</label></div>`));
+    card.appendChild(choiceGrid({obj:ONB.lifting,key:"level"}, [
+      {value:"beginner",title:"Beginner",sub:"0-1 yr"},
+      {value:"intermediate",title:"Intermediate",sub:"1-3 yrs"},
+      {value:"advanced",title:"Advanced",sub:"3+ yrs"},
+    ], ONB.lifting.level, 3));
+    card.appendChild(el(`<div style="height:16px;"></div>`));
+    card.appendChild(textField("Lifting days per week", ONB.lifting, "daysPerWeek", "select", {options:[2,3,4,5,6].map(n=>({value:n,label:n+" days/week"}))}));
+    card.appendChild(textField("Plan start date", ONB.lifting, "startDate", "date"));
+  }
+
+  if(ONB.step===4){
+    const goals = calcMacroGoals(ONB.profile);
+    card.appendChild(el(`<h2 style="margin-bottom:4px;">Your macro targets</h2>`));
+    card.appendChild(el(`<p class="page-sub" style="margin-bottom:18px;">Calculated from your profile using the Mifflin-St Jeor formula. You can fine-tune anytime in Settings.</p>`));
+    card.appendChild(el(`<div class="grid grid-2" style="margin-bottom:6px;">
+      ${statTileHTML("Calories/day", goals.calories, "kcal", ICONS.fuel, "var(--fuel)")}
+      ${statTileHTML("Protein", goals.proteinG, "g", ICONS.fuel, "var(--fuel)")}
+    </div>`));
+    card.appendChild(el(`<div class="grid grid-2" style="margin-top:16px;">
+      ${statTileHTML("Carbs", goals.carbsG, "g", ICONS.fuel, "var(--fuel)")}
+      ${statTileHTML("Fat", goals.fatG, "g", ICONS.fuel, "var(--fuel)")}
+    </div>`));
+    card.appendChild(el(`<div class="hint" style="margin-top:14px;">Based on ${Math.round(kgToLb(ONB.profile.weightKg))}lbs, ${ONB.profile.heightCm}cm, age ${ONB.profile.age}, ${ONB.profile.activity.replace('_',' ')} activity, goal: ${ONB.profile.goal}.</div>`));
+  }
+
+  const nav = el(`<div style="display:flex;justify-content:space-between;margin-top:20px;"></div>`);
+  const backBtn = el(`<button class="btn">${ONB.step===0?'':'Back'}</button>`);
+  if(ONB.step===0) backBtn.style.visibility="hidden";
+  backBtn.addEventListener("click", ()=>{ ONB.step = Math.max(0, ONB.step-1); render(); });
+  const nextBtn = el(`<button class="btn btn-primary">${ONB.step===totalSteps-1? "Finish & Build My Plans":"Continue"}</button>`);
+  nextBtn.addEventListener("click", ()=>{
+    if(ONB.step < totalSteps-1){ ONB.step++; render(); return; }
+    finishOnboarding();
+  });
+  nav.appendChild(backBtn); nav.appendChild(nextBtn);
+  wrap.appendChild(nav);
+  return wrap;
+}
+function statTileHTML(label,value,unit,icon,color){
+  return `<div class="card" style="padding:16px;">
+    <div class="stat-icon" style="background:${color}22;color:${color};">${icon}</div>
+    <div class="stat-val">${esc(value)}<span style="font-size:13px;color:var(--text-dim);font-weight:600;"> ${esc(unit)}</span></div>
+    <div class="stat-label">${esc(label)}</div>
+  </div>`;
+}
+function finishOnboarding(){
+  STATE.profile = ONB.profile;
+  STATE.running = ONB.running;
+  STATE.lifting = ONB.lifting;
+  STATE.nutrition = ONB.nutrition;
+  STATE.running.plan = generateRunningPlan(STATE.running);
+  STATE.lifting.plan = generateLiftingPlan(STATE.lifting);
+  STATE.onboarded = true;
+  saveState();
+  ONB = null;
+  toast("Your plans are ready 🎉");
+  location.hash = "#/dashboard";
+  render();
+}
+
+/* =========================================================================
+   DASHBOARD
+   ========================================================================= */
+function renderDashboard(){
+  const wrap = el(`<div></div>`);
+  const [wkStart, wkEnd] = thisWeekRange();
+  wrap.appendChild(el(`<div class="page-head">
+      <div><div class="page-title">Hey${STATE.profile.name?", "+esc(STATE.profile.name):""} 👋</div>
+      <div class="page-sub">${fmtDateLong(todayISO())}</div></div>
+    </div>`));
+
+  // Today card
+  const tRun = todaysRun(STATE.running);
+  const tLift = todaysLift(STATE.lifting);
+  const today = el(`<div class="card" style="margin-bottom:16px;"><div class="card-title">Today's Plan</div></div>`);
+  const todayGrid = el(`<div class="grid grid-2"></div>`);
+  if(tRun && tRun.type!=="rest"){
+    todayGrid.appendChild(el(`<div class="card" style="padding:16px;border-color:var(--run);">
+      <span class="badge badge-run">${ICONS.run} RUN</span>
+      <div style="font-weight:800;font-size:16px;margin-top:10px;">${esc(tRun.label)}</div>
+      <div class="page-sub" style="margin-top:4px;">${esc(tRun.detail)}</div>
+    </div>`));
+  } else {
+    todayGrid.appendChild(el(`<div class="card" style="padding:16px;"><span class="badge badge-rest">Rest</span><div style="font-weight:800;font-size:16px;margin-top:10px;">No run scheduled</div></div>`));
+  }
+  if(tLift){
+    todayGrid.appendChild(el(`<div class="card" style="padding:16px;border-color:var(--lift);">
+      <span class="badge badge-lift">${ICONS.lift} LIFT</span>
+      <div style="font-weight:800;font-size:16px;margin-top:10px;">${esc(tLift.name)}</div>
+      <div class="page-sub" style="margin-top:4px;">${tLift.exercises.map(e=>esc(e.name)).join(", ")}</div>
+    </div>`));
+  } else {
+    todayGrid.appendChild(el(`<div class="card" style="padding:16px;"><span class="badge badge-rest">Rest</span><div style="font-weight:800;font-size:16px;margin-top:10px;">No lifting scheduled</div></div>`));
+  }
+  today.appendChild(todayGrid);
+  const todayBtns = el(`<div style="display:flex;gap:10px;margin-top:14px;"></div>`);
+  const btnLogRun = el(`<button class="btn btn-sm">${ICONS.plus} Log a run</button>`);
+  btnLogRun.addEventListener("click", ()=>openLogRunModal());
+  const btnLogLift = el(`<button class="btn btn-sm">${ICONS.plus} Log a lift</button>`);
+  btnLogLift.addEventListener("click", ()=>openLogLiftModal());
+  const btnLogFood = el(`<button class="btn btn-sm">${ICONS.plus} Log food</button>`);
+  btnLogFood.addEventListener("click", ()=>openLogFoodModal());
+  todayBtns.appendChild(btnLogRun); todayBtns.appendChild(btnLogLift); todayBtns.appendChild(btnLogFood);
+  today.appendChild(todayBtns);
+  wrap.appendChild(today);
+
+  // Stat row
+  const statGrid = el(`<div class="grid grid-3" style="margin-bottom:16px;"></div>`);
+  const weekKm = runKmInRange(wkStart,wkEnd);
+  const weekVol = liftVolumeInRange(wkStart,wkEnd);
+  const streak = currentStreak();
+  wrap.appendChild(statGrid);
+  statGrid.appendChild(el(statCardEl("This week's distance", round1(kmToMi(weekKm)), "mi", ICONS.run, "var(--run)")));
+  statGrid.appendChild(el(statCardEl("This week's lift volume", Math.round(kgToLb(weekVol)/1000), "K lbs", ICONS.lift, "var(--lift)")));
+  statGrid.appendChild(el(statCardEl("Current streak", streak, streak===1?"day":"days", ICONS.flame, "var(--warn)")));
+
+  // Macro ring + charts
+  const row = el(`<div class="grid grid-2"></div>`);
+  const goals = activeMacroGoals();
+  const totals = foodTotalsFor(todayISO());
+  const pct = goals.calories ? totals.calories/goals.calories : 0;
+  const macroCard = el(`<div class="card"><div class="card-title row"><span>Today's Fuel</span><a href="#/nutrition" class="btn btn-ghost btn-sm">Details</a></div></div>`);
+  const macroInner = el(`<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;"></div>`);
+  macroInner.appendChild(el(svgRing(pct, "var(--fuel)", 100, 10, "kcal", Math.round(totals.calories))));
+  const macroBars = el(`<div style="flex:1;min-width:160px;"></div>`);
+  macroBars.appendChild(el(barRow("Protein", goals.proteinG?totals.proteinG/goals.proteinG:0, `${Math.round(totals.proteinG)}/${goals.proteinG}g`, "var(--fuel)")));
+  macroBars.appendChild(el(barRow("Carbs", goals.carbsG?totals.carbsG/goals.carbsG:0, `${Math.round(totals.carbsG)}/${goals.carbsG}g`, "var(--lift)")));
+  macroBars.appendChild(el(barRow("Fat", goals.fatG?totals.fatG/goals.fatG:0, `${Math.round(totals.fatG)}/${goals.fatG}g`, "var(--warn)")));
+  macroInner.appendChild(macroBars);
+  macroCard.appendChild(macroInner);
+  row.appendChild(macroCard);
+
+  const chartsCard = el(`<div class="card"><div class="card-title">Last 4 Weeks — Running (mi)</div></div>`);
+  chartsCard.appendChild(el(svgBars(last4WeeksRunData(), "#FF5B2E", {height:130})));
+  row.appendChild(chartsCard);
+  wrap.appendChild(row);
+
+  const chartsCard2 = el(`<div class="card" style="margin-top:16px;"><div class="card-title">Last 4 Weeks — Lifting Volume (K lbs)</div></div>`);
+  chartsCard2.appendChild(el(svgBars(last4WeeksLiftData(), "#4C8DFF", {height:130})));
+  wrap.appendChild(chartsCard2);
+
+  return wrap;
+}
+function statCardEl(label,value,unit,icon,color){
+  return `<div class="card" style="padding:18px;">
+    <div class="stat-icon" style="background:${color}22;color:${color};">${icon}</div>
+    <div class="stat-val">${esc(value)}<span style="font-size:13px;color:var(--text-dim);font-weight:600;"> ${esc(unit)}</span></div>
+    <div class="stat-label">${esc(label)}</div>
+  </div>`;
+}
+
+/* =========================================================================
+   MODAL SYSTEM
+   ========================================================================= */
+function openModal(title, buildBody, opts={}){
+  const root = document.getElementById("modal-root");
+  root.innerHTML = "";
+  const bg = el(`<div class="modal-bg"></div>`);
+  const modal = el(`<div class="modal"></div>`);
+  const head = el(`<div class="modal-head"><h3>${esc(title)}</h3><span class="x-close">&times;</span></div>`);
+  head.querySelector(".x-close").addEventListener("click", closeModal);
+  bg.addEventListener("click", (e)=>{ if(e.target===bg) closeModal(); });
+  modal.appendChild(head);
+  const body = el(`<div></div>`);
+  buildBody(body, closeModal);
+  modal.appendChild(body);
+  bg.appendChild(modal);
+  root.appendChild(bg);
+}
+function closeModal(){ document.getElementById("modal-root").innerHTML = ""; }
+
+function submitBtn(label){ return el(`<button class="btn btn-primary btn-block" type="submit" style="margin-top:6px;">${esc(label)}</button>`); }
+
+/* ---- Log a Run ---- */
+function openLogRunModal(prefill){
+  openModal("Log a Run", (body)=>{
+    const form = el(`<form></form>`); form.noValidate = true;
+    const row1 = el(`<div class="field-row"></div>`);
+    const dateF = {date: (prefill&&prefill.date) || todayISO()};
+    row1.appendChild(textField("Date", dateF, "date", "date"));
+    const distF = {distanceKm: (prefill&&prefill.distanceKm) || ""};
+    row1.appendChild(textField("Distance (mi)", unitField(distF,"distanceKm",kmToMi,miToKm), "u", "number", {hint:"e.g. 3.1"}));
+    form.appendChild(row1);
+    const row2 = el(`<div class="field-row"></div>`);
+    const durF = {durationMin: (prefill&&prefill.durationMin) || ""};
+    row2.appendChild(textField("Duration (min)", durF, "durationMin", "number"));
+    const typeF = {type: (prefill&&prefill.type) || "easy"};
+    row2.appendChild(textField("Run type", typeF, "type", "select", {options:[
+      {value:"easy",label:"Easy"},{value:"long",label:"Long Run"},{value:"tempo",label:"Tempo"},{value:"intervals",label:"Intervals"},{value:"race",label:"Race"},
+    ]}));
+    form.appendChild(row2);
+    const noteF = {notes:(prefill&&prefill.notes)||""};
+    form.appendChild(textField("Notes (optional)", noteF, "notes", "text"));
+    if(prefill && prefill.source){
+      form.appendChild(el(`<div class="hint" style="margin-bottom:10px;">Imported from ${esc(prefill.source)}</div>`));
+    }
+    const btn = submitBtn("Save Run");
+    form.appendChild(btn);
+    form.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const distanceKm = parseFloat(distF.distanceKm);
+      const durationMin = parseFloat(durF.durationMin);
+      if(!distanceKm || distanceKm<=0){ toast("Enter a valid distance"); return; }
+      STATE.runLogs.push({
+        id: uid(), date: dateF.date, distanceKm, durationMin: durationMin||null,
+        paceMinPerKm: durationMin? round1(durationMin/distanceKm): null,
+        type: typeF.type, notes: noteF.notes, source: (prefill&&prefill.source)||"manual",
+      });
+      saveState(); closeModal(); toast("Run logged 🏃"); render();
+    });
+    body.appendChild(form);
+  });
+}
+
+/* ---- Log a Lift Session ---- */
+function openLogLiftModal(){
+  const template = todaysLift(STATE.lifting) || (STATE.lifting.plan ? STATE.lifting.plan.templates[0] : null);
+  openModal("Log a Lifting Session", (body)=>{
+    if(!template){ body.appendChild(el(`<div class="empty">No lifting program yet. Set one up in Settings.</div>`)); return; }
+    const form = el(`<form></form>`); form.noValidate = true;
+    form.appendChild(textField("Session", {name:template.name}, "name", "text"));
+    form.querySelector("input").disabled = true;
+    const dateF = {date: todayISO()};
+    form.appendChild(textField("Date", dateF, "date", "date"));
+    form.appendChild(el(`<div class="hint" style="margin:4px 0 8px;">Log the weight &amp; reps for each individual set — that gives more accurate progress tracking than one number per exercise.</div>`));
+    // One entry per exercise, each holding its own array of per-set {weight,reps}.
+    const exState = template.exercises.map(e=>{
+      const targetReps = parseInt(e.reps) || 8;
+      return { name:e.name, sets: Array.from({length:e.sets}, ()=>({weight:0, reps:targetReps})) };
+    });
+    exState.forEach((ex,i)=>{
+      const block = el(`<div class="exblock"><div class="exname">${esc(ex.name)} <span class="hint" style="font-weight:400;">${template.exercises[i].sets}x${template.exercises[i].reps} target</span></div></div>`);
+      ex.sets.forEach((st,si)=>{
+        const row = el(`<div class="setrow"><span class="setlabel">Set ${si+1}</span></div>`);
+        const wInput = el(`<input type="number" min="0" step="0.5" placeholder="lbs">`);
+        const repInput = el(`<input type="number" min="0" placeholder="reps" value="${st.reps}">`);
+        wInput.addEventListener("input", ()=>st.weight=lbToKg(parseFloat(wInput.value)||0));
+        repInput.addEventListener("input", ()=>st.reps=parseInt(repInput.value)||0);
+        row.appendChild(wInput); row.appendChild(repInput);
+        block.appendChild(row);
+      });
+      form.appendChild(block);
+    });
+    const btn = submitBtn("Save Session");
+    form.appendChild(btn);
+    form.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      STATE.liftLogs.push({
+        id: uid(), date: dateF.date, dayName: template.name,
+        exercises: exState.map(ex=>({ name:ex.name, sets: ex.sets.map(st=>({weight:st.weight, reps:st.reps})) })),
+      });
+      saveState(); closeModal(); toast("Session logged 💪"); render();
+    });
+    body.appendChild(form);
+  });
+}
+
+/* ---- Log Food ---- */
+function openLogFoodModal(){
+  openModal("Log Food", (body)=>{
+    const form = el(`<form></form>`); form.noValidate = true;
+    const nameF = {name:""};
+    form.appendChild(textField("Food / meal name", nameF, "name", "text"));
+    const mealF = {mealType:"breakfast"};
+    form.appendChild(textField("Meal", mealF, "mealType", "select", {options:[
+      {value:"breakfast",label:"Breakfast"},{value:"lunch",label:"Lunch"},{value:"dinner",label:"Dinner"},{value:"snack",label:"Snack"},
+    ]}));
+    const row1 = el(`<div class="field-row"></div>`);
+    const calF = {calories:""};
+    row1.appendChild(textField("Calories", calF, "calories", "number"));
+    const protF = {proteinG:""};
+    row1.appendChild(textField("Protein (g)", protF, "proteinG", "number"));
+    form.appendChild(row1);
+    const row2 = el(`<div class="field-row"></div>`);
+    const carbF = {carbsG:""};
+    row2.appendChild(textField("Carbs (g)", carbF, "carbsG", "number"));
+    const fatF = {fatG:""};
+    row2.appendChild(textField("Fat (g)", fatF, "fatG", "number"));
+    form.appendChild(row2);
+    const dateF = {date: todayISO()};
+    form.appendChild(textField("Date", dateF, "date", "date"));
+    const btn = submitBtn("Add Entry");
+    form.appendChild(btn);
+    form.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      if(!nameF.name){ toast("Give it a name"); return; }
+      STATE.foodLogs.push({
+        id: uid(), date: dateF.date, mealType: mealF.mealType, name: nameF.name,
+        calories: parseFloat(calF.calories)||0, proteinG: parseFloat(protF.proteinG)||0,
+        carbsG: parseFloat(carbF.carbsG)||0, fatG: parseFloat(fatF.fatG)||0,
+      });
+      saveState(); closeModal(); toast("Food logged 🍽️"); render();
+    });
+    body.appendChild(form);
+  });
+}
+
+/* =========================================================================
+   DEVICE / WATCH IMPORT  (Garmin Connect + Apple Watch / Apple Health)
+   ---------------------------------------------------------------------
+   There is no direct browser API for a live Garmin or Apple Watch
+   connection: Garmin's live sync requires a registered OAuth backend
+   app, and Apple HealthKit (where Apple Watch runs sync to) is only
+   reachable from a native iOS app, never from a website. What DOES
+   work fully client-side is importing the files both platforms let
+   you export:
+     - Garmin Connect: an activity's "Export TCX/GPX", or
+       Activities → Export CSV for many activities at once.
+     - Apple Watch (via Apple Health): Health app → profile icon →
+       "Export All Health Data" → export.xml (inside the zip).
+   ========================================================================= */
+function haversineKm(lat1,lon1,lat2,lon2){
+  const R=6371, toRad=d=>d*Math.PI/180;
+  const dLat=toRad(lat2-lat1), dLon=toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R * 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function parseGPXFile(text){
+  const doc = new DOMParser().parseFromString(text, "application/xml");
+  const pts = Array.from(doc.getElementsByTagName("trkpt"));
+  if(!pts.length) return [];
+  let km = 0;
+  for(let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    km += haversineKm(parseFloat(a.getAttribute("lat")),parseFloat(a.getAttribute("lon")),parseFloat(b.getAttribute("lat")),parseFloat(b.getAttribute("lon")));
+  }
+  const timeEls = doc.getElementsByTagName("time");
+  let durationMin = null, dateISO = todayISO();
+  if(timeEls.length>=2){
+    const t0 = new Date(timeEls[0].textContent), t1 = new Date(timeEls[timeEls.length-1].textContent);
+    durationMin = round1((t1-t0)/60000);
+    dateISO = t0.toISOString().slice(0,10);
+  }
+  if(km<0.05) return [];
+  return [{ date:dateISO, distanceKm:round1(km), durationMin, type:"easy", source:"GPX import" }];
+}
+function parseTCXFile(text){
+  const doc = new DOMParser().parseFromString(text, "application/xml");
+  const activities = Array.from(doc.getElementsByTagName("Activity"));
+  const out = [];
+  activities.forEach(act=>{
+    const sport = (act.getAttribute("Sport")||"").toLowerCase();
+    const laps = Array.from(act.getElementsByTagName("Lap"));
+    if(!laps.length) return;
+    let distM=0, timeS=0;
+    laps.forEach(lap=>{
+      const dEl = lap.getElementsByTagName("DistanceMeters")[0];
+      const tEl = lap.getElementsByTagName("TotalTimeSeconds")[0];
+      if(dEl) distM += parseFloat(dEl.textContent)||0;
+      if(tEl) timeS += parseFloat(tEl.textContent)||0;
+    });
+    const idEl = act.getElementsByTagName("Id")[0];
+    const dateISO = idEl ? new Date(idEl.textContent).toISOString().slice(0,10) : todayISO();
+    if(distM>50 && (!sport || sport.indexOf("run")>=0 || sport==="other")){
+      out.push({ date:dateISO, distanceKm:round1(distM/1000), durationMin:round1(timeS/60), type:"easy", source:"TCX import (Garmin)" });
+    }
+  });
+  return out;
+}
+function parseGarminCSV(text, unit){
+  const lines = text.split(/\r?\n/).filter(l=>l.trim().length);
+  if(lines.length<2) return [];
+  const header = splitCSVLine(lines[0]).map(h=>h.trim().toLowerCase());
+  const idx = (names)=> header.findIndex(h=>names.some(n=>h.indexOf(n)>=0));
+  const iType = idx(["activity type"]);
+  const iDate = idx(["date"]);
+  const iDist = idx(["distance"]);
+  const iTime = idx(["time"]);
+  let distUnit = unit;
+  if(iDist>=0 && header[iDist].indexOf("km")>=0) distUnit="km";
+  if(iDist>=0 && header[iDist].indexOf("mi")>=0) distUnit="mi";
+  const out = [];
+  for(let i=1;i<lines.length;i++){
+    const cols = splitCSVLine(lines[i]);
+    const type = (iType>=0 ? cols[iType] : "").toLowerCase();
+    if(iType>=0 && type.indexOf("run")<0) continue;
+    const rawDist = parseFloat((iDist>=0?cols[iDist]:"0").replace(/[^0-9.]/g,""));
+    if(!rawDist) continue;
+    const km = distUnit==="mi" ? rawDist*1.60934 : rawDist;
+    let durationMin = null;
+    if(iTime>=0){
+      const parts = cols[iTime].split(":").map(Number);
+      if(parts.length===3) durationMin = round1(parts[0]*60+parts[1]+parts[2]/60);
+      else if(parts.length===2) durationMin = round1(parts[0]+parts[1]/60);
+    }
+    let dateISO = todayISO();
+    if(iDate>=0){
+      const d = new Date(cols[iDate]);
+      if(!isNaN(d)) dateISO = d.toISOString().slice(0,10);
+    }
+    out.push({ date:dateISO, distanceKm:round1(km), durationMin, type:"easy", source:"CSV import (Garmin)" });
+  }
+  return out;
+}
+function splitCSVLine(line){
+  const out=[]; let cur=""; let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){ inQ=!inQ; continue; }
+    if(c===',' && !inQ){ out.push(cur); cur=""; continue; }
+    cur+=c;
+  }
+  out.push(cur);
+  return out;
+}
+function parseAppleHealthXML(text){
+  const doc = new DOMParser().parseFromString(text, "application/xml");
+  const workouts = Array.from(doc.getElementsByTagName("Workout"));
+  const out = [];
+  workouts.forEach(w=>{
+    const activityType = w.getAttribute("workoutActivityType")||"";
+    if(activityType.toLowerCase().indexOf("run")<0) return;
+    const distRaw = parseFloat(w.getAttribute("totalDistance"));
+    const distUnit = (w.getAttribute("totalDistanceUnit")||"km").toLowerCase();
+    if(!distRaw) return;
+    const km = distUnit.indexOf("mi")>=0 ? distRaw*1.60934 : distRaw;
+    const durRaw = parseFloat(w.getAttribute("duration"));
+    const durUnit = (w.getAttribute("durationUnit")||"min").toLowerCase();
+    const durationMin = durUnit.indexOf("sec")>=0 ? round1(durRaw/60) : round1(durRaw);
+    const start = w.getAttribute("startDate");
+    const dateISO = start ? new Date(start).toISOString().slice(0,10) : todayISO();
+    out.push({ date:dateISO, distanceKm:round1(km), durationMin, type:"easy", source:"Apple Health / Apple Watch import" });
+  });
+  return out;
+}
+function dedupeAgainstExisting(entries){
+  return entries.filter(e => !STATE.runLogs.some(r => r.date===e.date && Math.abs(r.distanceKm-e.distanceKm)<0.05));
+}
+
+function openImportModal(){
+  openModal("Import Runs from Garmin / Apple Watch", (body)=>{
+    body.appendChild(el(`<p class="hint" style="margin-bottom:14px;line-height:1.5;">
+      A live "always-on" Garmin or Apple Watch connection needs a registered developer
+      integration (Garmin OAuth + a backend, or a native iOS app for Apple HealthKit) —
+      not something a browser page can do on its own. What works right now: export your
+      activities from either platform and import the file here.<br><br>
+      <b>Garmin Connect:</b> open an activity → Export TCX/GPX, or go to Activities → Export CSV.<br>
+      <b>Apple Watch:</b> Health app on iPhone → profile picture → Export All Health Data → use export.xml from the zip.
+    </p>`));
+    const fileF = {file:null};
+    const unitF = {unit:"mi"};
+    const wrap2 = el(`<div class="field"><label>Choose exported file (.gpx, .tcx, .csv, or .xml)</label></div>`);
+    const input = el(`<input type="file" accept=".gpx,.tcx,.csv,.xml">`);
+    wrap2.appendChild(input);
+    body.appendChild(wrap2);
+    const csvUnitWrap = textField("If CSV — distance column unit", unitF, "unit", "select", {options:[{value:"mi",label:"Miles"},{value:"km",label:"Kilometers"}]});
+    body.appendChild(csvUnitWrap);
+    const preview = el(`<div></div>`);
+    body.appendChild(preview);
+    let parsedEntries = [];
+    input.addEventListener("change", ()=>{
+      const file = input.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        const text = reader.result;
+        const name = file.name.toLowerCase();
+        try{
+          if(name.endsWith(".gpx")) parsedEntries = parseGPXFile(text);
+          else if(name.endsWith(".tcx")) parsedEntries = parseTCXFile(text);
+          else if(name.endsWith(".csv")) parsedEntries = parseGarminCSV(text, unitF.unit);
+          else if(name.endsWith(".xml")) parsedEntries = parseAppleHealthXML(text);
+          else parsedEntries = [];
+        }catch(err){ console.error(err); parsedEntries = []; }
+        const fresh = dedupeAgainstExisting(parsedEntries);
+        preview.innerHTML = "";
+        if(!parsedEntries.length){
+          preview.appendChild(el(`<div class="empty">No running activities found in that file.</div>`));
+          return;
+        }
+        preview.appendChild(el(`<div class="hint" style="margin:8px 0;">Found ${parsedEntries.length} run(s), ${fresh.length} new.</div>`));
+        fresh.slice(0,8).forEach(r=>{
+          preview.appendChild(el(`<div class="list-row"><div><div class="lr-main">${fmtDate(r.date)} — ${round1(kmToMi(r.distanceKm))} mi</div><div class="lr-sub">${r.durationMin?r.durationMin+' min':''}</div></div></div>`));
+        });
+        const impBtn = el(`<button class="btn btn-primary btn-block" style="margin-top:12px;">Import ${fresh.length} Run${fresh.length===1?'':'s'}</button>`);
+        if(!fresh.length) impBtn.setAttribute("disabled","disabled");
+        impBtn.addEventListener("click", ()=>{
+          fresh.forEach(r=> STATE.runLogs.push({ id:uid(), ...r }));
+          saveState(); closeModal(); toast(`Imported ${fresh.length} run(s) 📥`); render();
+        });
+        preview.appendChild(impBtn);
+      };
+      reader.readAsText(file);
+    });
+  });
+}
+
+/* =========================================================================
+   RUNNING PAGE
+   ========================================================================= */
+let runningWeekView = null;
+function renderRunning(){
+  const wrap = el(`<div></div>`);
+  wrap.appendChild(el(`<div class="page-head">
+      <div><div class="page-title">Running Program</div><div class="page-sub">${RUN_GOALS[STATE.running.goalType].label} · ${STATE.running.level} · ${STATE.running.daysPerWeek} days/week</div></div>
+    </div>`));
+
+  const actions = el(`<div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;"></div>`);
+  const logBtn = el(`<button class="btn btn-primary">${ICONS.plus} Log a Run</button>`);
+  logBtn.addEventListener("click", ()=>openLogRunModal());
+  const importBtn = el(`<button class="btn">⌚ Import from Garmin / Apple Watch</button>`);
+  importBtn.addEventListener("click", ()=>openImportModal());
+  actions.appendChild(logBtn); actions.appendChild(importBtn);
+  wrap.appendChild(actions);
+
+  // Plan week viewer
+  const plan = STATE.running.plan || [];
+  if(runningWeekView===null){
+    const idx = Math.floor(daysBetween(STATE.running.startDate, todayISO())/7);
+    runningWeekView = clamp(idx, 0, Math.max(0,plan.length-1));
+  }
+  const planCard = el(`<div class="card" style="margin-bottom:18px;"></div>`);
+  const wk = plan[runningWeekView];
+  const head = el(`<div class="card-title row"></div>`);
+  head.appendChild(el(`<span>Week ${runningWeekView+1} of ${plan.length}${wk&&wk.isRecovery?' · Recovery Week':''} — ${wk?round1(kmToMi(wk.totalKm)):0} mi total</span>`));
+  const navBtns = el(`<div style="display:flex;gap:6px;"></div>`);
+  const prevBtn = el(`<button class="btn btn-sm" ${runningWeekView<=0?'disabled':''}>&larr;</button>`);
+  prevBtn.addEventListener("click", ()=>{ runningWeekView=clamp(runningWeekView-1,0,plan.length-1); render(); });
+  const nextBtn = el(`<button class="btn btn-sm" ${runningWeekView>=plan.length-1?'disabled':''}>&rarr;</button>`);
+  nextBtn.addEventListener("click", ()=>{ runningWeekView=clamp(runningWeekView+1,0,plan.length-1); render(); });
+  navBtns.appendChild(prevBtn); navBtns.appendChild(nextBtn);
+  head.appendChild(navBtns);
+  planCard.appendChild(head);
+
+  const grid = el(`<div class="weekgrid"></div>`);
+  const todayDow = mondayIndex(todayISO());
+  const currentPlanIdx = clamp(Math.floor(daysBetween(STATE.running.startDate, todayISO())/7),0,plan.length-1);
+  if(wk){
+    wk.days.forEach(d=>{
+      const isToday = runningWeekView===currentPlanIdx && d.dow===todayDow;
+      const badgeClass = d.type==="rest" ? "badge-rest" : "badge-run";
+      grid.appendChild(el(`<div class="daycard ${isToday?'today':''}">
+          <div class="dname">${DOW[d.dow]}</div>
+          <span class="badge ${badgeClass}" style="width:fit-content;">${esc(d.label)}</span>
+          <div class="ddetail">${esc(d.detail)}</div>
+        </div>`));
+    });
+  } else {
+    grid.appendChild(el(`<div class="empty">No plan yet — set one up in Settings.</div>`));
+  }
+  planCard.appendChild(grid);
+  wrap.appendChild(planCard);
+
+  // Chart + history
+  const row = el(`<div class="grid grid-2"></div>`);
+  const chartCard = el(`<div class="card"><div class="card-title">Weekly Mileage (last 4 weeks)</div></div>`);
+  chartCard.appendChild(el(svgBars(last4WeeksRunData(), "#FF5B2E", {height:150})));
+  row.appendChild(chartCard);
+
+  const histCard = el(`<div class="card"><div class="card-title">Recent Runs</div></div>`);
+  const recent = STATE.runLogs.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,6);
+  if(!recent.length){
+    histCard.appendChild(el(`<div class="empty">No runs logged yet</div>`));
+  } else {
+    recent.forEach(r=>{
+      const row2 = el(`<div class="list-row">
+        <div><div class="lr-main">${fmtDate(r.date)} — ${round1(kmToMi(r.distanceKm))} mi</div>
+        <div class="lr-sub">${r.durationMin?r.durationMin+' min · '+ (r.paceMinPerKm?round1(r.paceMinPerKm*1.60934)+' min/mi':'') :''} ${r.source&&r.source!=='manual'?'· '+esc(r.source):''}</div></div>
+        <span class="badge badge-run">${esc(r.type||'run')}</span>
+      </div>`);
+      histCard.appendChild(row2);
+    });
+  }
+  row.appendChild(histCard);
+  wrap.appendChild(row);
+
+  return wrap;
+}
+
+/* =========================================================================
+   LIFTING PAGE
+   ========================================================================= */
+function renderLifting(){
+  const wrap = el(`<div></div>`);
+  wrap.appendChild(el(`<div class="page-head">
+      <div><div class="page-title">Weightlifting Program</div><div class="page-sub">${STATE.lifting.split.replace('_',' ')} split · ${STATE.lifting.level} · ${STATE.lifting.daysPerWeek} days/week</div></div>
+    </div>`));
+
+  const actions = el(`<div style="display:flex;gap:10px;margin-bottom:18px;"></div>`);
+  const logBtn = el(`<button class="btn btn-primary">${ICONS.plus} Log a Session</button>`);
+  logBtn.addEventListener("click", ()=>openLogLiftModal());
+  actions.appendChild(logBtn);
+  wrap.appendChild(actions);
+
+  const plan = STATE.lifting.plan;
+  const planCard = el(`<div class="card" style="margin-bottom:18px;"><div class="card-title">Weekly Split</div></div>`);
+  const grid = el(`<div class="weekgrid"></div>`);
+  const todayDow = mondayIndex(todayISO());
+  for(let dow=0; dow<7; dow++){
+    const slot = plan ? plan.days.find(d=>d.dow===dow) : null;
+    const isToday = dow===todayDow;
+    if(slot){
+      grid.appendChild(el(`<div class="daycard ${isToday?'today':''}">
+          <div class="dname">${DOW[dow]}</div>
+          <span class="badge badge-lift" style="width:fit-content;">${esc(slot.template.name)}</span>
+          <div class="ddetail">${slot.template.exercises.map(e=>esc(e.name)).join(", ")}</div>
+        </div>`));
+    } else {
+      grid.appendChild(el(`<div class="daycard ${isToday?'today':''}"><div class="dname">${DOW[dow]}</div><span class="badge badge-rest">Rest</span></div>`));
+    }
+  }
+  planCard.appendChild(grid);
+  wrap.appendChild(planCard);
+
+  // Templates detail
+  const tplCard = el(`<div class="card" style="margin-bottom:18px;"><div class="card-title">Program Details</div></div>`);
+  const tabs = el(`<div class="tabs"></div>`);
+  const tplBody = el(`<div></div>`);
+  (plan ? plan.templates : []).forEach((t,i)=>{
+    const tab = el(`<div class="tab ${i===0?'active':''}">${esc(t.name)}</div>`);
+    tab.addEventListener("click", ()=>{
+      tabs.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+      tab.classList.add("active");
+      renderTplBody(t);
+    });
+    tabs.appendChild(tab);
+  });
+  function renderTplBody(t){
+    tplBody.innerHTML = "";
+    const table = el(`<table><thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th></tr></thead><tbody></tbody></table>`);
+    const tbody = table.querySelector("tbody");
+    t.exercises.forEach(e=>{
+      tbody.appendChild(el(`<tr><td>${esc(e.name)}</td><td>${e.sets}</td><td>${esc(e.reps)}</td></tr>`));
+    });
+    tplBody.appendChild(table);
+  }
+  tplCard.appendChild(tabs); tplCard.appendChild(tplBody);
+  wrap.appendChild(tplCard);
+  if(plan && plan.templates.length) renderTplBody(plan.templates[0]);
+
+  // Strength progress + history
+  const row = el(`<div class="grid grid-2"></div>`);
+  const names = mainLiftNames();
+  const chartCard = el(`<div class="card"><div class="card-title">Estimated 1RM Progress</div></div>`);
+  if(!names.length){
+    chartCard.appendChild(el(`<div class="empty">Log a few sessions to see strength trends</div>`));
+  } else {
+    names.forEach(n=>{
+      chartCard.appendChild(el(`<div style="font-size:12px;font-weight:700;color:var(--text-dim);margin:10px 0 4px;">${esc(n)}</div>`));
+      chartCard.appendChild(el(svgLine(strengthHistoryFor(n), "#4C8DFF", {height:100})));
+    });
+  }
+  row.appendChild(chartCard);
+
+  const histCard = el(`<div class="card"><div class="card-title">Recent Sessions</div></div>`);
+  const recent = STATE.liftLogs.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,6);
+  if(!recent.length){
+    histCard.appendChild(el(`<div class="empty">No sessions logged yet</div>`));
+  } else {
+    recent.forEach(l=>{
+      const vol = l.exercises.reduce((s,e)=>s+setsArrayOf(e).reduce((s2,st)=>s2+st.weight*st.reps,0),0);
+      const setSummary = l.exercises.map(e=>{
+        const sets = setsArrayOf(e).filter(st=>st.weight>0||st.reps>0);
+        if(!sets.length) return "";
+        return `${esc(e.name)}: `+sets.map(st=>`${Math.round(kgToLb(st.weight))}×${st.reps}`).join(", ");
+      }).filter(Boolean).join(" · ");
+      histCard.appendChild(el(`<div class="list-row">
+        <div><div class="lr-main">${fmtDate(l.date)} — ${esc(l.dayName)}</div>
+        <div class="lr-sub">${l.exercises.length} exercises · ${Math.round(kgToLb(vol))} lbs volume</div>
+        ${setSummary?`<div class="lr-sub" style="margin-top:2px;">${setSummary}</div>`:''}</div>
+      </div>`));
+    });
+  }
+  row.appendChild(histCard);
+  wrap.appendChild(row);
+
+  return wrap;
+}
+
+/* =========================================================================
+   NUTRITION PAGE
+   ========================================================================= */
+function renderNutrition(){
+  const wrap = el(`<div></div>`);
+  wrap.appendChild(el(`<div class="page-head">
+      <div><div class="page-title">Nutrition & Macros</div><div class="page-sub">${STATE.nutrition.method==='auto'?'Auto-calculated targets':'Manual targets'}</div></div>
+    </div>`));
+
+  const actions = el(`<div style="display:flex;gap:10px;margin-bottom:18px;"></div>`);
+  const logBtn = el(`<button class="btn btn-primary">${ICONS.plus} Log Food</button>`);
+  logBtn.addEventListener("click", ()=>openLogFoodModal());
+  actions.appendChild(logBtn);
+  wrap.appendChild(actions);
+
+  const goals = activeMacroGoals();
+  const totals = foodTotalsFor(todayISO());
+  const top = el(`<div class="card" style="margin-bottom:18px;"><div class="card-title">Today</div></div>`);
+  const topInner = el(`<div style="display:flex;gap:26px;align-items:center;flex-wrap:wrap;"></div>`);
+  topInner.appendChild(el(svgRing(goals.calories?totals.calories/goals.calories:0, "var(--fuel)", 120, 11, "of "+goals.calories+" kcal", Math.round(totals.calories))));
+  const bars = el(`<div style="flex:1;min-width:200px;"></div>`);
+  bars.appendChild(el(barRow("Protein", goals.proteinG?totals.proteinG/goals.proteinG:0, `${Math.round(totals.proteinG)} / ${goals.proteinG} g`, "var(--fuel)")));
+  bars.appendChild(el(barRow("Carbs", goals.carbsG?totals.carbsG/goals.carbsG:0, `${Math.round(totals.carbsG)} / ${goals.carbsG} g`, "var(--lift)")));
+  bars.appendChild(el(barRow("Fat", goals.fatG?totals.fatG/goals.fatG:0, `${Math.round(totals.fatG)} / ${goals.fatG} g`, "var(--warn)")));
+  topInner.appendChild(bars);
+  top.appendChild(topInner);
+  wrap.appendChild(top);
+
+  const row = el(`<div class="grid grid-2"></div>`);
+  const logCard = el(`<div class="card"><div class="card-title">Today's Log</div></div>`);
+  const todays = STATE.foodLogs.filter(f=>f.date===todayISO());
+  if(!todays.length){
+    logCard.appendChild(el(`<div class="empty">Nothing logged today yet</div>`));
+  } else {
+    ["breakfast","lunch","dinner","snack"].forEach(meal=>{
+      const items = todays.filter(f=>f.mealType===meal);
+      if(!items.length) return;
+      logCard.appendChild(el(`<div style="font-size:11.5px;font-weight:800;color:var(--text-dim);text-transform:uppercase;margin:12px 0 2px;">${meal}</div>`));
+      items.forEach(f=>{
+        const r = el(`<div class="list-row">
+          <div><div class="lr-main">${esc(f.name)}</div><div class="lr-sub">${Math.round(f.calories)} kcal · P${Math.round(f.proteinG)} C${Math.round(f.carbsG)} F${Math.round(f.fatG)}</div></div>
+        </div>`);
+        const del = el(`<button class="btn btn-ghost btn-sm">Remove</button>`);
+        del.addEventListener("click", ()=>{ STATE.foodLogs = STATE.foodLogs.filter(x=>x.id!==f.id); saveState(); render(); });
+        r.appendChild(del);
+        logCard.appendChild(r);
+      });
+    });
+  }
+  row.appendChild(logCard);
+
+  const histCard = el(`<div class="card"><div class="card-title">Last 7 Days — Calories</div></div>`);
+  const data = last7Days().map(d=>({label:fmtDate(d).replace(" ",""), value: Math.round(foodTotalsFor(d).calories), highlight:d===todayISO()}));
+  histCard.appendChild(el(svgBars(data, "#3ED598", {height:150})));
+  row.appendChild(histCard);
+  wrap.appendChild(row);
+
+  return wrap;
+}
+
+/* =========================================================================
+   SETTINGS PAGE
+   ========================================================================= */
+function renderSettings(){
+  const wrap = el(`<div></div>`);
+  wrap.appendChild(el(`<div class="page-head"><div><div class="page-title">Settings</div><div class="page-sub">Update your profile and regenerate your plans anytime</div></div></div>`));
+
+  const tabs = el(`<div class="tabs"></div>`);
+  const body = el(`<div></div>`);
+  const sections = [
+    {key:"profile", label:"Profile & Goal"},
+    {key:"running", label:"Running"},
+    {key:"lifting", label:"Lifting"},
+    {key:"nutrition", label:"Nutrition"},
+    {key:"data", label:"Data"},
+  ];
+  if(isConfigured()) sections.push({key:"billing", label:"Billing & Account"});
+  let active = "profile";
+  sections.forEach((s,i)=>{
+    const tab = el(`<div class="tab ${i===0?'active':''}">${s.label}</div>`);
+    tab.addEventListener("click", ()=>{
+      tabs.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+      tab.classList.add("active");
+      active = s.key;
+      renderSection();
+    });
+    tabs.appendChild(tab);
+  });
+
+  function renderSection(){
+    body.innerHTML = "";
+    const card = el(`<div class="card"></div>`);
+    body.appendChild(card);
+
+    if(active==="profile"){
+      const p = Object.assign({}, STATE.profile);
+      card.appendChild(textField("Name", p, "name", "text"));
+      const row1 = el(`<div class="field-row"></div>`);
+      row1.appendChild(textField("Age", p, "age", "number"));
+      row1.appendChild(textField("Sex", p, "sex", "select", {options:[{value:"female",label:"Female"},{value:"male",label:"Male"},{value:"other",label:"Other"}]}));
+      card.appendChild(row1);
+      const row2 = el(`<div class="field-row"></div>`);
+      row2.appendChild(textField("Height (cm)", p, "heightCm", "number"));
+      row2.appendChild(textField("Weight (lbs)", unitField(p,"weightKg",kgToLb,lbToKg), "u", "number"));
+      card.appendChild(row2);
+      card.appendChild(textField("Activity level", p, "activity", "select", {options:[
+        {value:"sedentary",label:"Sedentary"},{value:"light",label:"Light"},{value:"moderate",label:"Moderate"},{value:"active",label:"Active"},{value:"very_active",label:"Very Active"},
+      ]}));
+      card.appendChild(textField("Goal", p, "goal", "select", {options:[{value:"lose",label:"Lose Fat"},{value:"maintain",label:"Maintain"},{value:"gain",label:"Build Muscle"}]}));
+      const save = el(`<button class="btn btn-primary">Save Profile</button>`);
+      save.addEventListener("click", ()=>{ STATE.profile = p; saveState(); toast("Profile updated"); render(); });
+      card.appendChild(save);
+    }
+
+    if(active==="running"){
+      const r = Object.assign({}, STATE.running);
+      card.appendChild(textField("Training for", r, "goalType", "select", {options:Object.keys(RUN_GOALS).map(k=>({value:k,label:RUN_GOALS[k].label}))}));
+      card.appendChild(textField("Experience level", r, "level", "select", {options:[{value:"beginner",label:"Beginner"},{value:"intermediate",label:"Intermediate"},{value:"advanced",label:"Advanced"}]}));
+      card.appendChild(textField("Days per week", r, "daysPerWeek", "select", {options:[2,3,4,5,6].map(n=>({value:n,label:n+" days"}))}));
+      card.appendChild(textField("Plan start date", r, "startDate", "date"));
+      card.appendChild(el(`<div class="hint" style="margin-bottom:14px;">Changing any of these and saving will regenerate your full running plan.</div>`));
+      const save = el(`<button class="btn btn-primary">Regenerate Running Plan</button>`);
+      save.addEventListener("click", ()=>{
+        r.daysPerWeek = parseInt(r.daysPerWeek);
+        r.plan = generateRunningPlan(r);
+        STATE.running = r; saveState(); runningWeekView=null; toast("Running plan regenerated"); render();
+      });
+      card.appendChild(save);
+    }
+
+    if(active==="lifting"){
+      const l = Object.assign({}, STATE.lifting);
+      card.appendChild(textField("Split style", l, "split", "select", {options:[{value:"full_body",label:"Full Body"},{value:"upper_lower",label:"Upper / Lower"},{value:"ppl",label:"Push / Pull / Legs"}]}));
+      card.appendChild(textField("Experience level", l, "level", "select", {options:[{value:"beginner",label:"Beginner"},{value:"intermediate",label:"Intermediate"},{value:"advanced",label:"Advanced"}]}));
+      card.appendChild(textField("Days per week", l, "daysPerWeek", "select", {options:[2,3,4,5,6].map(n=>({value:n,label:n+" days"}))}));
+      card.appendChild(textField("Plan start date", l, "startDate", "date"));
+      card.appendChild(el(`<div class="hint" style="margin-bottom:14px;">Changing any of these and saving will regenerate your weekly split.</div>`));
+      const save = el(`<button class="btn btn-primary">Regenerate Lifting Plan</button>`);
+      save.addEventListener("click", ()=>{
+        l.daysPerWeek = parseInt(l.daysPerWeek);
+        l.plan = generateLiftingPlan(l);
+        STATE.lifting = l; saveState(); toast("Lifting plan regenerated"); render();
+      });
+      card.appendChild(save);
+    }
+
+    if(active==="nutrition"){
+      const n = JSON.parse(JSON.stringify(STATE.nutrition));
+      card.appendChild(textField("Target method", n, "method", "select", {options:[{value:"auto",label:"Auto-calculate from profile"},{value:"manual",label:"Manual"}]}));
+      const manualWrap = el(`<div></div>`);
+      function drawManual(){
+        manualWrap.innerHTML = "";
+        if(n.method!=="manual") return;
+        const row1 = el(`<div class="field-row"></div>`);
+        row1.appendChild(textField("Calories", n.manual, "calories", "number"));
+        row1.appendChild(textField("Protein (g)", n.manual, "proteinG", "number"));
+        manualWrap.appendChild(row1);
+        const row2 = el(`<div class="field-row"></div>`);
+        row2.appendChild(textField("Carbs (g)", n.manual, "carbsG", "number"));
+        row2.appendChild(textField("Fat (g)", n.manual, "fatG", "number"));
+        manualWrap.appendChild(row2);
+      }
+      drawManual();
+      card.appendChild(manualWrap);
+      const save = el(`<button class="btn btn-primary">Save Nutrition Targets</button>`);
+      save.addEventListener("click", ()=>{ STATE.nutrition = n; saveState(); toast("Nutrition targets updated"); render(); });
+      card.appendChild(save);
+      // re-render manual fields on method change
+      const methodSelect = card.querySelector("select");
+      methodSelect.addEventListener("change", ()=>{ drawManual(); });
+    }
+
+    if(active==="billing"){
+      card.appendChild(el(`<p class="page-sub" style="margin-bottom:6px;">Signed in as ${esc(SESSION ? SESSION.user.email : "")}</p>`));
+      const statusLabel = hasActiveAccess() ? (SUBSCRIPTION.status==="trialing"?"Free trial active":"Subscription active") : "No active subscription";
+      card.appendChild(el(`<p style="margin-bottom:18px;"><span class="badge ${hasActiveAccess()?'badge-fuel':'badge-warn'}">${esc(statusLabel)}</span></p>`));
+      const manageBtn = el(`<button class="btn" style="margin-right:10px;">Manage Subscription</button>`);
+      manageBtn.addEventListener("click", async ()=>{
+        manageBtn.disabled = true; manageBtn.textContent = "Opening…";
+        try{
+          const res = await fetch("/api/create-portal-session", {
+            method:"POST", headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ userId: SESSION.user.id }),
+          });
+          if(!res.ok) throw new Error();
+          const { url } = await res.json();
+          window.location.href = url;
+        }catch(e){
+          toast("Billing portal isn't set up yet — see README.md.");
+          manageBtn.disabled = false; manageBtn.textContent = "Manage Subscription";
+        }
+      });
+      const logoutBtn2 = el(`<button class="btn btn-ghost">Log Out</button>`);
+      logoutBtn2.addEventListener("click", signOutUser);
+      card.appendChild(manageBtn); card.appendChild(logoutBtn2);
+      card.appendChild(el(`<div class="hint" style="margin-top:14px;">${esc(cloudSyncNote || "Your data syncs automatically in the background.")}</div>`));
+    }
+
+    if(active==="data"){
+      card.appendChild(el(`<p class="page-sub" style="margin-bottom:16px;">${isConfigured() ? "Your data syncs to your account and is also cached locally in this browser for instant loading." : "All your data (profile, plans, run logs, lifting logs, food logs) is stored locally in this browser only — nothing is sent to a server."} Export a backup or clear everything below.</p>`));
+      const exportBtn = el(`<button class="btn" style="margin-right:10px;">Export Backup (JSON)</button>`);
+      exportBtn.addEventListener("click", ()=>{
+        const blob = new Blob([JSON.stringify(STATE,null,2)], {type:"application/json"});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "peakform-backup-"+todayISO()+".json";
+        a.click();
+      });
+      const resetBtn = el(`<button class="btn btn-danger">Reset All Data</button>`);
+      resetBtn.addEventListener("click", ()=>{
+        openModal("Reset all data?", (b,close)=>{
+          b.appendChild(el(`<p style="margin-bottom:16px;">This permanently deletes your profile, plans, and all logged activity from this browser. This can't be undone.</p>`));
+          const row = el(`<div style="display:flex;gap:10px;"></div>`);
+          const cancel = el(`<button class="btn">Cancel</button>`);
+          cancel.addEventListener("click", close);
+          const confirmBtn = el(`<button class="btn btn-danger">Yes, delete everything</button>`);
+          confirmBtn.addEventListener("click", ()=>{ close(); resetAllData(); });
+          row.appendChild(cancel); row.appendChild(confirmBtn);
+          b.appendChild(row);
+        });
+      });
+      card.appendChild(exportBtn); card.appendChild(resetBtn);
+    }
+  }
+
+  wrap.appendChild(tabs);
+  wrap.appendChild(body);
+  renderSection();
+  return wrap;
+}
+
+/* =========================================================================
+   BOOTSTRAP
+   ========================================================================= */
+async function boot(){
+  if(isConfigured()){
+    // Restore an existing session (e.g. a page refresh) before first render.
+    const { data } = await supabaseClient.auth.getSession();
+    SESSION = data.session || null;
+    if(SESSION){
+      await pullCloudState();
+      await fetchSubscription();
+    }
+    // Keep SESSION/SUBSCRIPTION in sync with login/logout/token refresh events,
+    // including the moment a magic link or email confirmation completes.
+    supabaseClient.auth.onAuthStateChange(async (event, newSession)=>{
+      const wasLoggedIn = !!SESSION;
+      SESSION = newSession || null;
+      if(SESSION && !wasLoggedIn){
+        await pullCloudState();
+        await fetchSubscription();
+      }
+      render();
+    });
+    // If we just came back from Stripe Checkout, the webhook may take a
+    // moment to land — poll a few times so the paywall clears itself.
+    if(new URLSearchParams(location.search).get("checkout")==="success"){
+      let tries = 0;
+      const poll = setInterval(async ()=>{
+        tries++;
+        await fetchSubscription();
+        render();
+        if(hasActiveAccess() || tries>=10) clearInterval(poll);
+      }, 2000);
+    }
+  }
+  render();
+}
+boot();
+</script>
+</body>
+</html>
+;
     --surface:#15181D;
     --surface-2:#1C2027;
     --surface-3:#242832;
